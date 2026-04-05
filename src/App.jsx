@@ -67,25 +67,25 @@ function App() {
 
     setIsSending(true)
 
-    const recipientEmail = formData.email.trim()
+    const userEmail = formData.email.trim()
 
-    const templateParams = {
+    const ownerTemplateParams = {
       // Recipient aliases
-      to_email: recipientEmail,
-      email: recipientEmail,
-      to: recipientEmail,
-      to_mail: recipientEmail,
-      to_address: recipientEmail,
-      recipient: recipientEmail,
-      recipient_email: recipientEmail,
+      to_email: EMAILJS_CONFIG.TO_EMAIL,
+      email: EMAILJS_CONFIG.TO_EMAIL,
+      to: EMAILJS_CONFIG.TO_EMAIL,
+      to_mail: EMAILJS_CONFIG.TO_EMAIL,
+      to_address: EMAILJS_CONFIG.TO_EMAIL,
+      recipient: EMAILJS_CONFIG.TO_EMAIL,
+      recipient_email: EMAILJS_CONFIG.TO_EMAIL,
       // Sender aliases
       from_name: formData.name,
       name: formData.name,
       user_name: formData.name,
-      from_email: formData.email,
-      email_from: formData.email,
-      reply_to: formData.email,
-      user_email: formData.email,
+      from_email: userEmail,
+      email_from: userEmail,
+      reply_to: userEmail,
+      user_email: userEmail,
       // Subject aliases
       subject: formData.subject,
       title: formData.subject,
@@ -98,13 +98,31 @@ function App() {
       body: formData.message,
     }
 
-    emailjs
-      .send(
+    const userTemplateParams = {
+      ...ownerTemplateParams,
+      to_email: userEmail,
+      email: userEmail,
+      to: userEmail,
+      to_mail: userEmail,
+      to_address: userEmail,
+      recipient: userEmail,
+      recipient_email: userEmail,
+    }
+
+    Promise.all([
+      emailjs.send(
         EMAILJS_CONFIG.SERVICE_ID,
         EMAILJS_CONFIG.TEMPLATE_ID,
-        templateParams,
+        ownerTemplateParams,
         { publicKey: EMAILJS_CONFIG.PUBLIC_KEY }
-      )
+      ),
+      emailjs.send(
+        EMAILJS_CONFIG.SERVICE_ID,
+        EMAILJS_CONFIG.TEMPLATE_ID,
+        userTemplateParams,
+        { publicKey: EMAILJS_CONFIG.PUBLIC_KEY }
+      ),
+    ])
       .then(() => {
         alert('Message sent successfully!')
         formRef.current?.reset()
