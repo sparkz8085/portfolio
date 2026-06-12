@@ -2,30 +2,33 @@
 
 ### BCA Student | Gen AI Enthusiast | Web Developer
 
+> Building practical web experiences while learning every day.
+
 I'm a Bachelor of Computer Applications (BCA) student at **B.P. Poddar Institute of Management and Technology (BPPIMT), Salt Lake**.
 
-I am passionate about **Web Development, Generative AI, Machine Learning, and Cybersecurity**. I enjoy building responsive web applications, learning modern technologies, and strengthening my programming fundamentals through practical projects.
+I am passionate about **Generative AI, Machine Learning, Web Development, and Cybersecurity**. I enjoy building responsive web applications, learning modern technologies, and strengthening my programming fundamentals through hands-on projects.
 
 ---
 
 ## 🚀 About Me
 
-- 🎓 BCA Student (2024–2028)
+- 🎓 Bachelor of Computer Applications (BCA) Student
 - 🏫 B.P. Poddar Institute of Management and Technology
+- 📅 Session: 2024 – 2028
 - 🤖 Interested in Generative AI & Machine Learning
 - 🌐 Web Development Enthusiast
-- 💻 Learning modern technologies and software development practices
-- 🔒 Exploring cybersecurity and secure application development
-- 📚 Always learning and improving every day
+- 💻 Passionate about Software Development
+- 🔒 Exploring Cybersecurity Concepts
+- 📚 Continuous Learner
 
 ---
 
-## 🛠️ Technical Skills
+## 🛠️ Skills & Technologies
 
 ### Programming Languages
 - C Programming
-- C++ (Basics)
-- Java (Basics)
+- C++ Basics
+- Java Basics
 - JavaScript
 - Python
 
@@ -35,12 +38,14 @@ I am passionate about **Web Development, Generative AI, Machine Learning, and Cy
 - JavaScript
 - React
 
-### Tools & Technologies
+### Backend & Database
+- Django
+- Database Management
+
+### Tools
 - Git
 - GitHub
-- Django
 - Vite
-- Database Management
 
 ---
 
@@ -49,57 +54,100 @@ I am passionate about **Web Development, Generative AI, Machine Learning, and Cy
 ### Bachelor of Computer Applications (BCA)
 **B.P. Poddar Institute of Management and Technology (BPPIMT), Salt Lake**
 
-📅 Session: **2024 – 2028**
+**Current Student**  
+Session: **2024 – 2028**
 
 ---
 
-## 💼 Projects
+## 💼 Featured Projects
 
-### 🧮 Calculator Web App
-A full-stack calculator application built with Django backend, providing accurate computations through a clean and user-friendly interface.
+### 🌟 Personal Portfolio Website
 
-**Tech Stack:** Django, HTML, CSS, JavaScript
+A modern, responsive portfolio website showcasing projects, skills, and professional information with smooth animations and modern UI design.
+
+**Tech Stack:** React, Vite, Modern CSS
+
+🔗 Live Demo: https://cryptoxneuron.vercel.app
 
 ---
 
 ### 📦 Web Inventory System
-A web-based inventory management system designed to track products, manage stock levels, and streamline warehouse operations efficiently.
+
+A comprehensive web-based inventory management system to track products, stock levels, and manage warehouse operations efficiently.
 
 **Tech Stack:** React, Django, Database
 
+🔗 Live Demo: https://banking-app-six-tawny.vercel.app
+
 ---
 
-### 🌟 Personal Portfolio Website
-A modern portfolio website featuring responsive design, smooth animations, and glassmorphism-inspired UI to showcase projects, skills, and professional information.
+### 🧮 Calculator Web App
 
-**Tech Stack:** React, Vite, Modern CSS
+A full-stack calculator application with a clean, intuitive interface built with Django backend for reliable computation and data handling.
+
+**Tech Stack:** Django, HTML, CSS, JavaScript
+
+🔗 Live Demo: https://project-dj-psi.vercel.app
 
 ---
 
 ## 🌱 Currently Learning
 
 - Advanced React Development
-- Machine Learning Fundamentals
 - Generative AI Applications
+- Machine Learning Fundamentals
 - Backend Development with Django
-- Cybersecurity Concepts
+- Software Engineering Best Practices
+- Cybersecurity Fundamentals
 
 ---
 
-## 📫 Connect With Me
+## 🌐 Portfolio & Live Projects
+
+| Project | Link |
+|----------|------|
+| Personal Portfolio | https://cryptoxneuron.vercel.app |
+| Web Inventory System | https://banking-app-six-tawny.vercel.app |
+| Calculator Web App | https://project-dj-psi.vercel.app |
+
+---
+
+## 📊 GitHub Goals
+
+- Build more real-world web applications
+- Improve problem-solving skills
+- Learn advanced AI/ML concepts
+- Contribute to open-source projects
+- Explore modern software development practices
+
+---
+
+## 📫 Contact Me
 
 📧 Email: **kunalsarkar61570@gmail.com**
 
-### Social Links
-- GitHub: [Your GitHub Profile]
-- LinkedIn: [Your LinkedIn Profile]
+💼 Open to:
+- Collaboration Opportunities
+- Web Development Projects
+- Learning & Networking
+- Technology Discussions
 
 ---
 
-## 💡 Quote
+## 🤝 Connect With Me
 
-> "Building practical web experiences while learning every day."
+[![Portfolio](https://img.shields.io/badge/Portfolio-Visit-blueviolet?style=for-the-badge)](https://cryptoxneuron.vercel.app)
+
+<!-- Add your links below -->
+- GitHub: https://github.com/your-username
+- LinkedIn: https://linkedin.com/in/your-profile
 
 ---
 
-⭐ Feel free to explore my repositories and connect with me. I'm always open to learning, collaboration, and exciting opportunities in technology.
+## 💡 Personal Motto
+
+> "Curiosity drives learning, and learning builds the future."
+
+---
+
+⭐ Thanks for visiting my profile! Feel free to explore my repositories and connect with me.
