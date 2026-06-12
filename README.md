@@ -1,16 +1,105 @@
-# React + Vite
+# 👋 Hi, I'm Kunal Sarkar
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### BCA Student | Gen AI Enthusiast | Web Developer
 
-Currently, two official plugins are available:
+I'm a Bachelor of Computer Applications (BCA) student at **B.P. Poddar Institute of Management and Technology (BPPIMT), Salt Lake**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+I am passionate about **Web Development, Generative AI, Machine Learning, and Cybersecurity**. I enjoy building responsive web applications, learning modern technologies, and strengthening my programming fundamentals through practical projects.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🚀 About Me
 
-## Expanding the ESLint configuration
+- 🎓 BCA Student (2024–2028)
+- 🏫 B.P. Poddar Institute of Management and Technology
+- 🤖 Interested in Generative AI & Machine Learning
+- 🌐 Web Development Enthusiast
+- 💻 Learning modern technologies and software development practices
+- 🔒 Exploring cybersecurity and secure application development
+- 📚 Always learning and improving every day
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🛠️ Technical Skills
+
+### Programming Languages
+- C Programming
+- C++ (Basics)
+- Java (Basics)
+- JavaScript
+- Python
+
+### Frontend Development
+- HTML5
+- CSS3
+- JavaScript
+- React
+
+### Tools & Technologies
+- Git
+- GitHub
+- Django
+- Vite
+- Database Management
+
+---
+
+## 🎓 Education
+
+### Bachelor of Computer Applications (BCA)
+**B.P. Poddar Institute of Management and Technology (BPPIMT), Salt Lake**
+
+📅 Session: **2024 – 2028**
+
+---
+
+## 💼 Projects
+
+### 🧮 Calculator Web App
+A full-stack calculator application built with Django backend, providing accurate computations through a clean and user-friendly interface.
+
+**Tech Stack:** Django, HTML, CSS, JavaScript
+
+---
+
+### 📦 Web Inventory System
+A web-based inventory management system designed to track products, manage stock levels, and streamline warehouse operations efficiently.
+
+**Tech Stack:** React, Django, Database
+
+---
+
+### 🌟 Personal Portfolio Website
+A modern portfolio website featuring responsive design, smooth animations, and glassmorphism-inspired UI to showcase projects, skills, and professional information.
+
+**Tech Stack:** React, Vite, Modern CSS
+
+---
+
+## 🌱 Currently Learning
+
+- Advanced React Development
+- Machine Learning Fundamentals
+- Generative AI Applications
+- Backend Development with Django
+- Cybersecurity Concepts
+
+---
+
+## 📫 Connect With Me
+
+📧 Email: **kunalsarkar61570@gmail.com**
+
+### Social Links
+- GitHub: [Your GitHub Profile]
+- LinkedIn: [Your LinkedIn Profile]
+
+---
+
+## 💡 Quote
+
+> "Building practical web experiences while learning every day."
+
+---
+
+⭐ Feel free to explore my repositories and connect with me. I'm always open to learning, collaboration, and exciting opportunities in technology.
