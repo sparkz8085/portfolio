@@ -2,8 +2,9 @@
 
 :root {
   font-family: 'Manrope', sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  color: #3c3328;
+  line-height: 1.6;
+  font-weight: 500;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -16,16 +17,30 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: #030612;
+  background: #0a0e27;
+  color: #ffffff;
 }
 
 h1,
 h2,
-h3,
-h4 {
-  margin: 0;
+h3 {
+  margin-top: 0;
+  color: #ffffff;
+  line-height: 1.2;
   font-family: 'Fraunces', serif;
-  line-height: 1.15;
+}
+
+h1 {
+  font-size: clamp(2rem, 7vw, 3.6rem);
+}
+
+h2 {
+  font-size: clamp(1.25rem, 3vw, 1.7rem);
+  margin-bottom: 0.55rem;
+}
+
+h3 {
+  font-size: 1.02rem;
 }
 
 p {
