@@ -23,17 +23,21 @@ function App() {
   useEffect(() => {
     const handlePointerDown = (event) => {
       if (event.button !== 0) return
+
       const target = event.target.closest(
-        'a, button, input, textarea, select, .card, .project-card, .expertise-card, .contact-card, .pill-list li'
+        '.site-nav__links a, .site-nav__brand, .site-nav__availability, .hero__badge, .hero__actions a, .pill-list li, .project-card__tags li, .project-card__status, .social-links a, .project-card__link, .submit-btn'
       )
       if (!target) return
 
-      const ripple = document.createElement('span')
-      ripple.className = 'tap-wave'
-      ripple.style.left = `${event.clientX}px`
-      ripple.style.top = `${event.clientY}px`
-      document.body.appendChild(ripple)
-      ripple.addEventListener('animationend', () => ripple.remove(), { once: true })
+      target.classList.remove('tap-wobble')
+      // Restart the animation if the same pill is tapped again quickly.
+      void target.offsetWidth
+      target.classList.add('tap-wobble')
+      target.addEventListener(
+        'animationend',
+        () => target.classList.remove('tap-wobble'),
+        { once: true }
+      )
     }
 
     document.addEventListener('pointerdown', handlePointerDown)
