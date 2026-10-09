@@ -1,6 +1,5 @@
 import './App.css'
 import { useScrollAnimation } from './hooks/useScrollAnimation'
-import LightPillar from './components/LightPillar'
 import GalaxyCanvas from './components/GalaxyCanvas'
 import emailjs from '@emailjs/browser'
 import { useRef } from 'react'
@@ -133,18 +132,8 @@ function App() {
 
   return (
     <>
-      <div className="page-background">
-        <LightPillar
-          topColor="#5227FF"
-          bottomColor="#FF9FFC"
-          intensity={0.6}
-          rotationSpeed={0.2}
-          quality="medium"
-          className="page-light"
-          glowAmount={0.003}
-          pillarWidth={4.0}
-          pillarHeight={0.3}
-        />
+      <div className="page-background" aria-hidden="true">
+        <GalaxyCanvas />
       </div>
 
       <div className="page-shell">
@@ -161,7 +150,6 @@ function App() {
 
         {/* HERO */}
         <header className="hero" id="home">
-          <GalaxyCanvas />
           <div className="hero__badge">
             BCA Student • Developer • Designer
           </div>
