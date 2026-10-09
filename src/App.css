@@ -1467,3 +1467,63 @@ footer {
     background-color: rgba(13, 15, 39, 0.94);
   }
 }
+
+
+/* Original animated galaxy layer — public-repository-safe, no licensed source. */
+.hero {
+  isolation: isolate;
+}
+
+.hero-galaxy {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0.86;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 68%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 68%, transparent 100%);
+}
+
+.hero-galaxy__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-galaxy__vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 45%, transparent 0%, rgba(9, 10, 28, 0.06) 42%, rgba(9, 10, 28, 0.42) 100%),
+    linear-gradient(90deg, rgba(10, 12, 30, 0.36), transparent 22% 78%, rgba(10, 12, 30, 0.3)),
+    linear-gradient(180deg, rgba(10, 12, 30, 0.08), transparent 35%, rgba(10, 12, 30, 0.38));
+}
+
+.hero > :not(.hero-galaxy) {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-galaxy + .hero__badge {
+  position: relative;
+}
+
+@media (max-width: 760px) {
+  .hero-galaxy {
+    opacity: 0.62;
+  }
+
+  .hero-galaxy__vignette {
+    background:
+      radial-gradient(ellipse at 50% 38%, transparent 0%, rgba(9, 10, 28, 0.18) 52%, rgba(9, 10, 28, 0.48) 100%),
+      linear-gradient(180deg, rgba(10, 12, 30, 0.06), transparent 32%, rgba(10, 12, 30, 0.42));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-galaxy {
+    opacity: 0.5;
+  }
+}
