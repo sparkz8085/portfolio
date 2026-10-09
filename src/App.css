@@ -1629,67 +1629,68 @@ footer {
 }
 
 
-/* Pointer-triggered liquid ripple wave. Fixed positioning keeps it visible on any surface. */
-.tap-wave {
-  position: fixed;
-  z-index: 9999;
-  width: 18px;
-  height: 18px;
+/* Water-drop ripple contained inside the tapped glass pill. */
+.site-nav__links a,
+.site-nav__brand,
+.site-nav__availability,
+.hero__badge,
+.hero__actions a,
+.pill-list li,
+.project-card__tags li,
+.project-card__status,
+.social-links a,
+.project-card__link,
+.submit-btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.liquid-ripple {
+  position: absolute;
+  z-index: 0;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   pointer-events: none;
-  transform: translate(-50%, -50%) scale(0.15);
-  border: 1.5px solid rgba(226, 216, 255, 0.92);
-  background: radial-gradient(circle, rgba(190, 166, 255, 0.2) 0%, rgba(155, 130, 255, 0.09) 42%, transparent 72%);
-  box-shadow: 0 0 14px rgba(174, 142, 255, 0.3), inset 0 0 8px rgba(255,255,255,0.14);
-  animation: tapWaveExpand 620ms cubic-bezier(0.16, 0.72, 0.24, 1) forwards;
-  will-change: transform, opacity;
+  transform: translate(-50%, -50%) scale(0.1);
+  border: 1px solid rgba(235, 225, 255, 0.92);
+  background: radial-gradient(circle, rgba(196, 176, 255, 0.32), rgba(177, 145, 255, 0.13) 45%, transparent 72%);
+  box-shadow: 0 0 12px rgba(174, 142, 255, 0.26), inset 0 0 7px rgba(255,255,255,0.22);
+  animation: liquidDropRipple 780ms cubic-bezier(0.16, 0.68, 0.22, 1) forwards;
 }
 
-.tap-wave::after {
+.liquid-ripple::before,
+.liquid-ripple::after {
   content: "";
   position: absolute;
-  inset: -7px;
-  border: 1px solid rgba(255, 170, 239, 0.48);
-  border-radius: inherit;
-  animation: tapWaveHalo 620ms ease-out forwards;
+  inset: -1px;
+  border: 1px solid rgba(225, 211, 255, 0.68);
+  border-radius: 50%;
+  animation: liquidRippleRing 780ms ease-out forwards;
 }
 
-@keyframes tapWaveExpand {
-  0% { opacity: 0.92; transform: translate(-50%, -50%) scale(0.15); }
-  65% { opacity: 0.55; }
-  100% { opacity: 0; transform: translate(-50%, -50%) scale(8); }
+.liquid-ripple::after {
+  animation-delay: 110ms;
+  border-color: rgba(255, 174, 235, 0.48);
 }
 
-@keyframes tapWaveHalo {
-  0% { opacity: 0.7; transform: scale(0.5); }
-  100% { opacity: 0; transform: scale(1.65); }
+@keyframes liquidDropRipple {
+  0% { opacity: 0.9; transform: translate(-50%, -50%) scale(0.1); }
+  22% { opacity: 0.72; }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(12); }
+}
+
+@keyframes liquidRippleRing {
+  0% { opacity: 0.78; transform: scale(0.25); }
+  100% { opacity: 0; transform: scale(5.2); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tap-wave,
-  .tap-wave::after {
+  .liquid-ripple,
+  .liquid-ripple::before,
+  .liquid-ripple::after {
     animation-duration: 180ms;
-  }
-}
-
-
-/* A tap wiggles only the selected glass tab or pill, not the surrounding page. */
-.tap-wobble {
-  transform-origin: center;
-  animation: pillWobble 420ms cubic-bezier(0.36, 0.07, 0.19, 0.97) both !important;
-}
-
-@keyframes pillWobble {
-  0% { transform: scale(1); }
-  18% { transform: scale(0.94) rotate(-3deg); }
-  38% { transform: scale(1.045) rotate(2.5deg); }
-  56% { transform: scale(0.985) rotate(-1.5deg); }
-  74% { transform: scale(1.015) rotate(0.8deg); }
-  100% { transform: scale(1) rotate(0); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .tap-wobble {
-    animation-duration: 120ms !important;
+    animation-delay: 0ms;
   }
 }
