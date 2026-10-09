@@ -2,7 +2,7 @@ import './App.css'
 import { useScrollAnimation } from './hooks/useScrollAnimation'
 import GalaxyCanvas from './components/GalaxyCanvas'
 import emailjs from '@emailjs/browser'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import profilePic from './assets/profile.jpg'
 
 // EmailJS Configuration
@@ -19,6 +19,26 @@ function App() {
   const projectsRef = useScrollAnimation()
   const contactRef = useScrollAnimation()
   const formRef = useRef()
+
+  useEffect(() => {
+    const handlePointerDown = (event) => {
+      if (event.button !== 0) return
+      const target = event.target.closest(
+        'a, button, input, textarea, select, .card, .project-card, .expertise-card, .contact-card, .pill-list li'
+      )
+      if (!target) return
+
+      const ripple = document.createElement('span')
+      ripple.className = 'tap-wave'
+      ripple.style.left = `${event.clientX}px`
+      ripple.style.top = `${event.clientY}px`
+      document.body.appendChild(ripple)
+      ripple.addEventListener('animationend', () => ripple.remove(), { once: true })
+    }
+
+    document.addEventListener('pointerdown', handlePointerDown)
+    return () => document.removeEventListener('pointerdown', handlePointerDown)
+  }, [])
 
   const handleSubmit = (e) => {
     e.preventDefault()
