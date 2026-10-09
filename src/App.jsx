@@ -99,6 +99,16 @@ function App() {
       featured: true,
     },
     {
+      title: 'Practice Programming Lab',
+      category: 'Developer Tools',
+      featured: true,
+      description:
+        'A PHP-powered local programming dashboard for discovering source files, inspecting code, running supported programs, and working with interactive input and output.',
+      note: 'Explores process management and clearer explanations for selected programming errors. Run support depends on installed toolchains.',
+      technologies: ['PHP', 'JavaScript', 'HTML/CSS', 'Process Management'],
+      github: 'https://github.com/sparkz8085/practice_programmming_lab',
+    },
+    {
       title: 'Calculator Web App',
       description:
         'A web-based calculator application designed with a clean and intuitive interface, focusing on responsive UI and reliable calculation functionality.',
@@ -147,6 +157,17 @@ function App() {
       </div>
 
       <div className="page-shell">
+        <nav className="site-nav" aria-label="Main navigation">
+          <a className="site-nav__brand" href="#home" aria-label="Kunal Sarkar home">KS<span>.</span></a>
+          <div className="site-nav__links">
+            <a href="#about">About</a>
+            <a href="#skills">Skills</a>
+            <a href="#projects">Projects</a>
+            <a href="#contact">Contact</a>
+          </div>
+          <a className="site-nav__availability" href="#contact"><span aria-hidden="true" /> Open to opportunities</a>
+        </nav>
+
         {/* HERO */}
         <header className="hero" id="home">
           <div className="hero__badge">
