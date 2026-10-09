@@ -37,7 +37,7 @@ export default function GalaxyCanvas() {
         size: 0.35 + Math.pow(random(), 2) * 1.5,
         alpha: 0.2 + random() * 0.75,
         phase: random() * Math.PI * 2,
-        speed: 0.08 + random() * 0.28,
+        orbitFactor: 0.35 + (1 - radius) * 1.25,
         hue: random(),
       }
     })
@@ -65,7 +65,8 @@ export default function GalaxyCanvas() {
       if (!visible) return
       const delta = lastTime ? Math.min((time - lastTime) / 1000, 0.05) : 0
       lastTime = time
-      if (!reduceMotion.matches) rotation += delta * 0.035
+      // Faster inner orbits and slower outer orbits keep the spiral recognizable.
+      if (!reduceMotion.matches) rotation += delta * 0.32
 
       context.clearRect(0, 0, width, height)
       const centerX = width * 0.5
@@ -73,9 +74,10 @@ export default function GalaxyCanvas() {
       const radiusX = Math.min(width * 0.48, 660)
       const radiusY = Math.min(height * 0.47, 330)
 
-      const glow = context.createRadialGradient(centerX, centerY, 0, centerX, centerY, radiusX)
-      glow.addColorStop(0, 'rgba(126, 101, 255, 0.13)')
-      glow.addColorStop(0.35, 'rgba(190, 118, 255, 0.055)')
+      const glow = context.createRadialGradient(centerX, centerY, 0, centerX, centerY, radiusX * 0.92)
+      glow.addColorStop(0, 'rgba(201, 143, 255, 0.2)')
+      glow.addColorStop(0.28, 'rgba(161, 103, 255, 0.09)')
+      glow.addColorStop(0.68, 'rgba(117, 78, 220, 0.025)')
       glow.addColorStop(1, 'rgba(20, 15, 55, 0)')
       context.fillStyle = glow
       context.fillRect(0, 0, width, height)
@@ -86,7 +88,7 @@ export default function GalaxyCanvas() {
       context.globalCompositeOperation = 'lighter'
 
       stars.forEach((star) => {
-        const angle = star.angle + rotation * star.speed
+        const angle = star.angle + rotation * star.orbitFactor
         const x = Math.cos(angle) * star.radius * radiusX
         const y = Math.sin(angle) * star.radius * radiusY
         const twinkle = 0.72 + Math.sin(time * 0.0012 + star.phase) * 0.28
@@ -112,8 +114,9 @@ export default function GalaxyCanvas() {
 
       // A small luminous core gives the spiral a tilted-galaxy silhouette.
       const core = context.createRadialGradient(0, 0, 0, 0, 0, Math.min(radiusX, radiusY) * 0.22)
-      core.addColorStop(0, 'rgba(255, 239, 255, 0.25)')
-      core.addColorStop(0.16, 'rgba(193, 158, 255, 0.12)')
+      core.addColorStop(0, 'rgba(255, 239, 255, 0.52)')
+      core.addColorStop(0.12, 'rgba(223, 181, 255, 0.28)')
+      core.addColorStop(0.36, 'rgba(193, 132, 255, 0.1)')
       core.addColorStop(1, 'rgba(150, 120, 255, 0)')
       context.fillStyle = core
       context.beginPath()
