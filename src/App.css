@@ -753,7 +753,7 @@ body::before {
 
 .page-background {
   z-index: 0;
-  opacity: 0.78;
+  opacity: 1;
 }
 
 .site-nav {
@@ -1482,7 +1482,7 @@ footer {
   height: 100%;
   overflow: hidden;
   pointer-events: none;
-  opacity: 0.98;
+  opacity: 1;
 }
 
 .galaxy-background__canvas {
@@ -1495,8 +1495,8 @@ footer {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at 50% 45%, transparent 0%, rgba(9, 8, 18, 0.02) 36%, rgba(7, 7, 11, 0.34) 78%, rgba(5, 5, 8, 0.72) 100%),
-    linear-gradient(90deg, rgba(7, 7, 11, 0.28), transparent 24% 76%, rgba(7, 7, 11, 0.28));
+    radial-gradient(ellipse at 50% 45%, transparent 0%, rgba(9, 8, 18, 0.02) 36%, rgba(7, 7, 11, 0.18) 78%, rgba(5, 5, 8, 0.42) 100%),
+    linear-gradient(90deg, rgba(7, 7, 11, 0.12), transparent 24% 76%, rgba(7, 7, 11, 0.12));
 }
 
 @media (max-width: 760px) {
@@ -1611,5 +1611,19 @@ footer {
   .site-nav__links a {
     padding: 0.58rem 0.7rem;
     font-size: 0.76rem;
+  }
+}
+
+
+/* Keep the galaxy visible in the gaps between glass panels. */
+.galaxy-background__vignette {
+  background:
+    radial-gradient(ellipse at 50% 45%, transparent 0%, rgba(9, 8, 18, 0.015) 42%, rgba(7, 7, 11, 0.14) 82%, rgba(5, 5, 8, 0.34) 100%),
+    linear-gradient(90deg, rgba(7, 7, 11, 0.08), transparent 24% 76%, rgba(7, 7, 11, 0.08));
+}
+
+@media (max-width: 760px) {
+  .galaxy-background {
+    opacity: 0.92;
   }
 }
