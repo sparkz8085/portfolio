@@ -29,15 +29,13 @@ function App() {
       )
       if (!target) return
 
-      target.classList.remove('tap-wobble')
-      // Restart the animation if the same pill is tapped again quickly.
-      void target.offsetWidth
-      target.classList.add('tap-wobble')
-      target.addEventListener(
-        'animationend',
-        () => target.classList.remove('tap-wobble'),
-        { once: true }
-      )
+      const bounds = target.getBoundingClientRect()
+      const ripple = document.createElement('span')
+      ripple.className = 'liquid-ripple'
+      ripple.style.left = `${event.clientX - bounds.left}px`
+      ripple.style.top = `${event.clientY - bounds.top}px`
+      target.appendChild(ripple)
+      ripple.addEventListener('animationend', () => ripple.remove(), { once: true })
     }
 
     document.addEventListener('pointerdown', handlePointerDown)
