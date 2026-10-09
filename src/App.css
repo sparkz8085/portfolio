@@ -1671,3 +1671,25 @@ footer {
     animation-duration: 180ms;
   }
 }
+
+
+/* A tap wiggles only the selected glass tab or pill, not the surrounding page. */
+.tap-wobble {
+  transform-origin: center;
+  animation: pillWobble 420ms cubic-bezier(0.36, 0.07, 0.19, 0.97) both !important;
+}
+
+@keyframes pillWobble {
+  0% { transform: scale(1); }
+  18% { transform: scale(0.94) rotate(-3deg); }
+  38% { transform: scale(1.045) rotate(2.5deg); }
+  56% { transform: scale(0.985) rotate(-1.5deg); }
+  74% { transform: scale(1.015) rotate(0.8deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tap-wobble {
+    animation-duration: 120ms !important;
+  }
+}
