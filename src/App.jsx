@@ -1,6 +1,7 @@
 import './App.css'
 import { useScrollAnimation } from './hooks/useScrollAnimation'
 import LightPillar from './components/LightPillar'
+import GalaxyCanvas from './components/GalaxyCanvas'
 import emailjs from '@emailjs/browser'
 import { useRef } from 'react'
 import profilePic from './assets/profile.jpg'
@@ -170,6 +171,7 @@ function App() {
 
         {/* HERO */}
         <header className="hero" id="home">
+          <GalaxyCanvas />
           <div className="hero__badge">
             BCA Student • Developer • Designer
           </div>
