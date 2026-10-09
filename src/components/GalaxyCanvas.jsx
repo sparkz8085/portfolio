@@ -136,10 +136,15 @@ export default function GalaxyCanvas() {
       }
     }, { threshold: 0.01 })
 
+    const onResize = () => {
+      resize()
+      if (reduceMotion.matches) draw(0)
+    }
+
     resize()
     observer.observe(canvas)
     draw(0)
-    window.addEventListener('resize', resize)
+    window.addEventListener('resize', onResize)
 
     const onMotionChange = () => {
       window.cancelAnimationFrame(frame)
@@ -154,7 +159,7 @@ export default function GalaxyCanvas() {
     return () => {
       window.cancelAnimationFrame(frame)
       observer.disconnect()
-      window.removeEventListener('resize', resize)
+      window.removeEventListener('resize', onResize)
       reduceMotion.removeEventListener?.('change', onMotionChange)
     }
   }, [])
