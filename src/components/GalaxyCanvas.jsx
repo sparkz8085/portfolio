@@ -34,8 +34,8 @@ export default function GalaxyCanvas() {
         angle,
         x: Math.cos(angle) * radius,
         y: Math.sin(angle) * radius * 0.53,
-        size: 0.35 + Math.pow(random(), 2) * 1.5,
-        alpha: 0.2 + random() * 0.75,
+        size: 0.45 + Math.pow(random(), 1.7) * 1.8,
+        alpha: 0.38 + random() * 0.62,
         phase: random() * Math.PI * 2,
         orbitFactor: 0.35 + (1 - radius) * 1.25,
         hue: random(),
@@ -75,8 +75,8 @@ export default function GalaxyCanvas() {
       const radiusY = Math.min(height * 0.47, 330)
 
       const glow = context.createRadialGradient(centerX, centerY, 0, centerX, centerY, radiusX * 0.92)
-      glow.addColorStop(0, 'rgba(201, 143, 255, 0.2)')
-      glow.addColorStop(0.28, 'rgba(161, 103, 255, 0.09)')
+      glow.addColorStop(0, 'rgba(201, 143, 255, 0.28)')
+      glow.addColorStop(0.28, 'rgba(161, 103, 255, 0.13)')
       glow.addColorStop(0.68, 'rgba(117, 78, 220, 0.025)')
       glow.addColorStop(1, 'rgba(20, 15, 55, 0)')
       context.fillStyle = glow
@@ -106,7 +106,7 @@ export default function GalaxyCanvas() {
 
         if (star.size > 1.45 && star.radius < 0.55) {
           context.beginPath()
-          context.fillStyle = `rgba(183, 157, 255, ${alpha * 0.1})`
+          context.fillStyle = `rgba(183, 157, 255, ${alpha * 0.2})`
           context.arc(x, y, star.size * 4, 0, Math.PI * 2)
           context.fill()
         }
