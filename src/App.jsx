@@ -81,6 +81,24 @@ function App() {
         'Python, Machine Learning, FastAPI, MongoDB, AWS S3, Docker',
     },
     {
+      title: 'Practice Programming Lab',
+      category: 'Web Development / Developer Tools',
+      description:
+        'A PHP-powered programming practice dashboard for discovering source files, inspecting code, and running exercises through an interactive console. It coordinates local compilers and interpreters for languages including PHP, Python, Java, C/C++, JavaScript/TypeScript, Go, Rust, Ruby, Perl, Lua, and Kotlin, subject to available toolchains.',
+      note:
+        'Designed for local use: programs run on the host machine rather than in a secure sandbox.',
+      technologies: [
+        'PHP',
+        'JavaScript',
+        'HTML',
+        'CSS',
+        'Git',
+        'Multi-Language Toolchains',
+      ],
+      github: 'https://github.com/sparkz8085/practice_programmming_lab',
+      featured: true,
+    },
+    {
       title: 'Calculator Web App',
       description:
         'A web-based calculator application designed with a clean and intuitive interface, focusing on responsive UI and reliable calculation functionality.',
@@ -320,14 +338,81 @@ function App() {
             <div className="project-grid">
               {projects.map((project) => (
                 <article
-                  className="project-card"
+                  className={`project-card ${
+                    project.featured ? 'project-card--featured' : ''
+                  }`}
                   key={project.title}
                 >
-                  <h3>{project.title}</h3>
+                  {project.featured && (
+                    <div className="project-card__visual" aria-hidden="true">
+                      <svg viewBox="0 0 48 48" fill="none">
+                        <rect
+                          x="5"
+                          y="8"
+                          width="38"
+                          height="31"
+                          rx="6"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        />
+                        <path
+                          d="m14 19 5 4-5 4m9 0h8"
+                          stroke="currentColor"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M11 13h26"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </div>
+                  )}
 
-                  <p>{project.description}</p>
+                  <div className="project-card__body">
+                    {project.category && (
+                      <div className="project-card__meta">
+                        <span>{project.category}</span>
+                        <span className="project-card__status">
+                          Featured project
+                        </span>
+                      </div>
+                    )}
 
-                  <span>{project.stack}</span>
+                    <h3>{project.title}</h3>
+
+                    <p>{project.description}</p>
+
+                    {project.note && (
+                      <p className="project-card__note">{project.note}</p>
+                    )}
+
+                    <div className="project-card__footer">
+                      {project.technologies ? (
+                        <ul className="project-card__tags">
+                          {project.technologies.map((technology) => (
+                            <li key={technology}>{technology}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <span>{project.stack}</span>
+                      )}
+
+                      {project.github && (
+                        <a
+                          className="project-card__link"
+                          href={project.github}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          View on GitHub <span aria-hidden="true">↗</span>
+                        </a>
+                      )}
+                    </div>
+                  </div>
                 </article>
               ))}
             </div>
