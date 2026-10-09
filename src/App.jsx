@@ -87,27 +87,17 @@ function App() {
       description:
         'A PHP-powered programming practice dashboard for discovering source files, inspecting code, and running exercises through an interactive console. It coordinates local compilers and interpreters for languages including PHP, Python, Java, C/C++, JavaScript/TypeScript, Go, Rust, Ruby, Perl, Lua, and Kotlin, subject to available toolchains.',
       note:
-        'Designed for local use: programs run on the host machine rather than in a secure sandbox.',
+        'Includes process-management features and clearer explanations for selected programming errors. Designed for local use: programs run on the host machine rather than in a secure sandbox. Run support depends on installed toolchains.',
       technologies: [
         'PHP',
         'JavaScript',
-        'HTML',
-        'CSS',
+        'HTML/CSS',
         'Git',
+        'Process Management',
         'Multi-Language Toolchains',
       ],
       github: 'https://github.com/sparkz8085/practice_programmming_lab',
       featured: true,
-    },
-    {
-      title: 'Practice Programming Lab',
-      category: 'Developer Tools',
-      featured: true,
-      description:
-        'A PHP-powered local programming dashboard for discovering source files, inspecting code, running supported programs, and working with interactive input and output.',
-      note: 'Explores process management and clearer explanations for selected programming errors. Run support depends on installed toolchains.',
-      technologies: ['PHP', 'JavaScript', 'HTML/CSS', 'Process Management'],
-      github: 'https://github.com/sparkz8085/practice_programmming_lab',
     },
     {
       title: 'Calculator Web App',
