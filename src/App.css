@@ -1318,3 +1318,152 @@ footer {
     scroll-behavior: auto !important;
   }
 }
+
+
+/* --------------------------------------------------------------------------
+   Liquid glass finish: refractive highlights, layered blur, and soft caustics
+   -------------------------------------------------------------------------- */
+.site-nav,
+.hero,
+.card,
+.expertise-card,
+.contact-card,
+.project-card,
+.contact-email-box,
+.hero__badge,
+.hero__actions a,
+.site-nav__availability {
+  -webkit-backdrop-filter: blur(26px) saturate(165%);
+  backdrop-filter: blur(26px) saturate(165%);
+}
+
+.site-nav {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.105), rgba(255,255,255,0.018) 42%, rgba(147,124,255,0.055)),
+    rgba(8, 10, 28, 0.62);
+  border-color: rgba(230, 225, 255, 0.24);
+  box-shadow:
+    0 18px 48px rgba(0,0,0,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.24),
+    inset 0 -1px 0 rgba(255,255,255,0.035);
+}
+
+.site-nav::before,
+.card::before,
+.contact-card::before,
+.expertise-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0.75;
+  background:
+    linear-gradient(128deg, rgba(255,255,255,0.14), transparent 22% 66%, rgba(169,151,255,0.07)),
+    radial-gradient(ellipse at 12% 0%, rgba(255,255,255,0.09), transparent 42%);
+  mask-image: linear-gradient(to bottom, #000, transparent 72%);
+}
+
+.site-nav {
+  isolation: isolate;
+}
+
+.site-nav > * {
+  position: relative;
+  z-index: 1;
+}
+
+.hero {
+  background:
+    radial-gradient(ellipse at 18% 0%, rgba(190, 177, 255, 0.13), transparent 42%),
+    linear-gradient(135deg, rgba(255,255,255,0.09), rgba(255,255,255,0.018) 42%, rgba(130,108,255,0.06)),
+    rgba(13, 15, 38, 0.48);
+  border-color: rgba(220, 213, 255, 0.3);
+  box-shadow:
+    0 30px 90px rgba(0,0,0,0.3),
+    inset 0 1px 0 rgba(255,255,255,0.24),
+    inset 0 -1px 0 rgba(255,255,255,0.05);
+}
+
+.card,
+.expertise-card,
+.contact-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,0.075), rgba(255,255,255,0.018) 50%, rgba(142,121,255,0.055)),
+    rgba(13, 15, 39, 0.58);
+  border-color: rgba(207, 199, 255, 0.22);
+  box-shadow:
+    0 22px 58px rgba(0,0,0,0.19),
+    inset 0 1px 0 rgba(255,255,255,0.15),
+    inset 0 -1px 0 rgba(255,255,255,0.035);
+}
+
+.card > *,
+.expertise-card > *,
+.contact-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.project-card {
+  background:
+    linear-gradient(145deg, rgba(255,255,255,0.07), rgba(255,255,255,0.012) 48%, rgba(145,123,255,0.07)) padding-box,
+    linear-gradient(135deg, rgba(255,255,255,0.34), rgba(162,146,255,0.26), rgba(255,159,232,0.2), rgba(121,231,255,0.18)) border-box;
+  box-shadow:
+    0 20px 52px rgba(0,0,0,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.14);
+}
+
+.project-card--featured {
+  background:
+    linear-gradient(145deg, rgba(255,255,255,0.09), rgba(255,255,255,0.018) 48%, rgba(145,123,255,0.09)) padding-box,
+    linear-gradient(135deg, rgba(225,218,255,0.55), rgba(162,146,255,0.42), rgba(255,159,232,0.34), rgba(121,231,255,0.3)) border-box;
+}
+
+.hero__badge,
+.hero__actions a,
+.site-nav__availability {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    0 8px 28px rgba(0,0,0,0.12);
+}
+
+.hero__actions a:first-child {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.2), transparent 52%),
+    linear-gradient(110deg, rgba(102,76,255,0.9), rgba(142,102,255,0.8) 52%, rgba(193,90,255,0.72));
+  border-color: rgba(229,220,255,0.42);
+}
+
+.hero__actions a.ghost {
+  background: linear-gradient(135deg, rgba(255,255,255,0.09), rgba(255,255,255,0.025));
+  border-color: rgba(255,255,255,0.2);
+}
+
+.form-group input,
+.form-group textarea {
+  background: linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
+  border-color: rgba(219, 211, 255, 0.2);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  background: rgba(255,255,255,0.085);
+  border-color: rgba(181,166,255,0.65);
+  box-shadow: 0 0 0 3px rgba(139,124,255,0.12), 0 12px 34px rgba(82,39,255,0.14), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+
+@supports not ((backdrop-filter: blur(1px))) {
+  .site-nav,
+  .hero,
+  .card,
+  .expertise-card,
+  .contact-card,
+  .project-card {
+    background-color: rgba(13, 15, 39, 0.94);
+  }
+}
