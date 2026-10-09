@@ -1627,3 +1627,47 @@ footer {
     opacity: 0.92;
   }
 }
+
+
+/* Pointer-triggered liquid ripple wave. Fixed positioning keeps it visible on any surface. */
+.tap-wave {
+  position: fixed;
+  z-index: 9999;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.15);
+  border: 1.5px solid rgba(226, 216, 255, 0.92);
+  background: radial-gradient(circle, rgba(190, 166, 255, 0.2) 0%, rgba(155, 130, 255, 0.09) 42%, transparent 72%);
+  box-shadow: 0 0 14px rgba(174, 142, 255, 0.3), inset 0 0 8px rgba(255,255,255,0.14);
+  animation: tapWaveExpand 620ms cubic-bezier(0.16, 0.72, 0.24, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.tap-wave::after {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border: 1px solid rgba(255, 170, 239, 0.48);
+  border-radius: inherit;
+  animation: tapWaveHalo 620ms ease-out forwards;
+}
+
+@keyframes tapWaveExpand {
+  0% { opacity: 0.92; transform: translate(-50%, -50%) scale(0.15); }
+  65% { opacity: 0.55; }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(8); }
+}
+
+@keyframes tapWaveHalo {
+  0% { opacity: 0.7; transform: scale(0.5); }
+  100% { opacity: 0; transform: scale(1.65); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tap-wave,
+  .tap-wave::after {
+    animation-duration: 180ms;
+  }
+}
