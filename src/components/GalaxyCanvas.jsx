@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 
-const STAR_COUNT = 560
+const STAR_COUNT = 1800
 const ARM_COUNT = 3
 
 function seededRandom(seed) {
@@ -168,9 +168,9 @@ export default function GalaxyCanvas() {
   }, [])
 
   return (
-    <div className="hero-galaxy" aria-hidden="true">
-      <canvas ref={canvasRef} className="hero-galaxy__canvas" />
-      <div className="hero-galaxy__vignette" />
+    <div className="galaxy-background" aria-hidden="true">
+      <canvas ref={canvasRef} className="galaxy-background__canvas" />
+      <div className="galaxy-background__vignette" />
     </div>
   )
 }
