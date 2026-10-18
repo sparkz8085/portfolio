@@ -1,615 +1,452 @@
 import './App.css'
-import { useScrollAnimation } from './hooks/useScrollAnimation'
-import GalaxyCanvas from './components/GalaxyCanvas'
+import './ScrollExperience.css'
 import emailjs from '@emailjs/browser'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import profilePic from './assets/profile.jpg'
 
-// EmailJS Configuration
 const EMAILJS_CONFIG = {
   PUBLIC_KEY: 'EJ9M9h4EEFlBZoWPp',
   SERVICE_ID: 'service_rahd7zd',
   TEMPLATE_ID: 'template_rv8hsoo',
 }
 
+const projects = [
+  {
+    number: '01',
+    title: 'Practice Programming Lab',
+    kind: 'Developer tools · Web application',
+    description:
+      'A programming practice dashboard for browsing source files, reviewing code, and running exercises through an interactive console across supported local toolchains.',
+    stack: ['PHP', 'JavaScript', 'Process management', 'Toolchains'],
+    link: 'https://github.com/sparkz8085/practice_programmming_lab',
+    featured: true,
+    symbol: '⌘',
+  },
+  {
+    number: '02',
+    title: 'Customer Categorization System',
+    kind: 'Machine learning · API',
+    description:
+      'A customer segmentation and personality classification project, spanning data preparation, model workflows, API integration, and deployment preparation.',
+    stack: ['Python', 'Machine learning', 'FastAPI', 'MongoDB'],
+    symbol: '↗',
+  },
+  {
+    number: '03',
+    title: 'UniLab',
+    kind: 'Product concept · Education',
+    description:
+      'An AI-assisted university practical and laboratory management concept focused on digital lab records, structured submissions, and clearer academic workflows.',
+    stack: ['Next.js', 'TypeScript', 'Python', 'MongoDB'],
+    symbol: '⌁',
+  },
+  {
+    number: '04',
+    title: 'Canva Graphic Design',
+    kind: 'Visual design · Creative work',
+    description:
+      'A collection of poster, social media, form, thumbnail, and editorial-style design work created for practice and client-oriented briefs.',
+    stack: ['Canva', 'Layout', 'Visual storytelling'],
+    symbol: '✳',
+  },
+  {
+    number: '05',
+    title: 'Web & learning projects',
+    kind: 'Selected experiments',
+    description:
+      'Small applications built to explore responsive interfaces, CRUD workflows, backend fundamentals, and the details that make a tool useful.',
+    stack: ['React', 'Django', 'HTML/CSS', 'JavaScript'],
+    symbol: '↳',
+  },
+]
+
+const capabilities = [
+  ['01', 'Web development', 'Responsive interfaces, practical app flows, and APIs that make ideas usable.'],
+  ['02', 'AI & automation', 'Exploring ML workflows, helpful automation, and grounded AI features.'],
+  ['03', 'Visual design', 'Turning rough ideas into considered layouts, graphics, and clear visual systems.'],
+]
+
+const steps = [
+  ['01', 'Understand', 'Start with the problem, the people using it, and the constraints.'],
+  ['02', 'Prototype', 'Make the key interaction real early, then learn from it.'],
+  ['03', 'Build', 'Keep the implementation readable, responsive, and maintainable.'],
+  ['04', 'Refine', 'Test the edges, improve the details, and document what matters.'],
+]
+
 function App() {
-  const aboutRef = useScrollAnimation()
-  const eduRef = useScrollAnimation()
-  const skillsRef = useScrollAnimation()
-  const projectsRef = useScrollAnimation()
-  const contactRef = useScrollAnimation()
-  const formRef = useRef()
+  const formRef = useRef(null)
+  const signatureRef = useRef(null)
+  const workStoryRef = useRef(null)
+  const [activeProject, setActiveProject] = useState(0)
+  const [sending, setSending] = useState(false)
+  const [messageState, setMessageState] = useState('')
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [commandOpen, setCommandOpen] = useState(false)
 
   useEffect(() => {
-    const handlePointerDown = (event) => {
-      if (event.button !== 0) return
-
-      const target = event.target.closest(
-        '.site-nav__links a, .site-nav__brand, .site-nav__availability, .hero__badge, .hero__actions a, .pill-list li, .project-card__tags li, .project-card__status, .social-links a, .project-card__link, .submit-btn'
-      )
-      if (!target) return
-
-      const bounds = target.getBoundingClientRect()
-      const ripple = document.createElement('span')
-      ripple.className = 'liquid-ripple'
-      ripple.style.left = `${event.clientX - bounds.left}px`
-      ripple.style.top = `${event.clientY - bounds.top}px`
-      target.appendChild(ripple)
-      ripple.addEventListener('animationend', () => ripple.remove(), { once: true })
+    const handleKeyDown = (event) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault()
+        setCommandOpen((open) => !open)
+      }
+      if (event.key === 'Escape') {
+        setCommandOpen(false)
+        setMenuOpen(false)
+      }
     }
-
-    document.addEventListener('pointerdown', handlePointerDown)
-    return () => document.removeEventListener('pointerdown', handlePointerDown)
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  useEffect(() => {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const narrowScreen = window.matchMedia('(max-width: 900px)').matches
+    if (reduceMotion || narrowScreen) return undefined
 
-    if (!formRef.current) {
-      alert('Form is not ready. Please refresh and try again.')
-      return
+    gsap.registerPlugin(ScrollTrigger)
+
+    const signatureContext = gsap.context(() => {
+      const timeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: signatureRef.current,
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 0.7,
+        },
+      })
+
+      timeline
+        .set('#letterKMask', { attr: { width: 0 } }, 0)
+        .set('#letterSMask', { attr: { width: 0 } }, 0)
+        .to('#letterKMask', { attr: { width: 490 }, duration: 0.9, ease: 'none' }, 0.05)
+        .to('.signature-guide--stem', { scaleY: 1, duration: 0.45, ease: 'none' }, 0.2)
+        .to('.signature-diagonal', { strokeDashoffset: 0, duration: 0.8, ease: 'none' }, 0.23)
+        .to('#letterSMask', { attr: { width: 850 }, duration: 0.85, ease: 'none' }, 0.72)
+        .to('.signature-annotations', { opacity: 1, y: 0, duration: 0.3, ease: 'none' }, 1.24)
+    }, signatureRef)
+
+    const workContext = gsap.context(() => {
+      let lastStep = -1
+      ScrollTrigger.create({
+        trigger: workStoryRef.current,
+        start: 'top top',
+        end: 'bottom bottom',
+        onUpdate: (trigger) => {
+          const nextStep = Math.min(projects.length, Math.floor(trigger.progress * (projects.length + 1)))
+          if (nextStep !== lastStep) {
+            lastStep = nextStep
+            setActiveProject(nextStep)
+          }
+        },
+      })
+    }, workStoryRef)
+
+    return () => {
+      signatureContext.revert()
+      workContext.revert()
     }
+  }, [])
 
-    emailjs
-      .sendForm(
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    if (!formRef.current || sending) return
+    setSending(true)
+    setMessageState('')
+    try {
+      await emailjs.sendForm(
         EMAILJS_CONFIG.SERVICE_ID,
         EMAILJS_CONFIG.TEMPLATE_ID,
         formRef.current,
-        { publicKey: EMAILJS_CONFIG.PUBLIC_KEY }
+        { publicKey: EMAILJS_CONFIG.PUBLIC_KEY },
       )
-      .then((result) => {
-        alert('Message sent successfully!')
-        console.log('EmailJS success:', {
-          status: result?.status,
-          text: result?.text,
-        })
-        formRef.current.reset()
-      })
-      .catch((error) => {
-        const status = error?.status
-          ? `Status ${error.status}`
-          : 'Unknown status'
-        const reason =
-          error?.text || error?.message || 'Unknown error'
-
-        alert(`Failed to send message. ${status}: ${reason}`)
-        console.error('EmailJS error:', error)
-      })
+      setMessageState('Thanks — your message has been sent.')
+      formRef.current.reset()
+    } catch {
+      setMessageState('Something went wrong. Please email me directly instead.')
+    } finally {
+      setSending(false)
+    }
   }
 
-  const skills = [
-    'C Programming',
-    'Java',
-    'Python',
-    'HTML5',
-    'CSS3',
-    'JavaScript',
-    'React',
-    'Django',
-    'FastAPI',
-    'Machine Learning',
-    'Git & GitHub',
-    'MongoDB',
-    'Docker',
-    'Canva',
-  ]
-
-  const projects = [
-    {
-      title: 'Customer Categorization System',
-      description:
-        'A machine learning project for customer segmentation and personality classification. I contributed to the ML core, data processing, model pipeline, prediction workflow, debugging, and deployment preparation.',
-      stack:
-        'Python, Machine Learning, FastAPI, MongoDB, AWS S3, Docker',
-    },
-    {
-      title: 'Practice Programming Lab',
-      category: 'Web Development / Developer Tools',
-      description:
-        'A PHP-powered programming practice dashboard for discovering source files, inspecting code, and running exercises through an interactive console. It coordinates local compilers and interpreters for languages including PHP, Python, Java, C/C++, JavaScript/TypeScript, Go, Rust, Ruby, Perl, Lua, and Kotlin, subject to available toolchains.',
-      note:
-        'Includes process-management features and clearer explanations for selected programming errors. Designed for local use: programs run on the host machine rather than in a secure sandbox. Run support depends on installed toolchains.',
-      technologies: [
-        'PHP',
-        'JavaScript',
-        'HTML/CSS',
-        'Git',
-        'Process Management',
-        'Multi-Language Toolchains',
-      ],
-      github: 'https://github.com/sparkz8085/practice_programmming_lab',
-      featured: true,
-    },
-    {
-      title: 'Calculator Web App',
-      description:
-        'A web-based calculator application designed with a clean and intuitive interface, focusing on responsive UI and reliable calculation functionality.',
-      stack: 'Django, HTML, CSS, JavaScript',
-    },
-    {
-      title: 'Web Inventory System',
-      description:
-        'A web-based inventory management project designed to organize products, monitor stock information, and simplify inventory-related operations.',
-      stack: 'React, Django, Database',
-    },
-    {
-      title: 'Django Notes Project',
-      description:
-        'A Django-based notes management application built to practice backend development, templates, CRUD functionality, routing, and database interaction.',
-      stack: 'Python, Django, HTML, CSS',
-    },
-    {
-      title: 'Personal Portfolio',
-      description:
-        'A modern responsive portfolio website featuring animated sections, glassmorphic UI elements, project showcases, social links, and an EmailJS-powered contact form.',
-      stack: 'React, Vite, JavaScript, CSS, EmailJS',
-    },
-    {
-      title: 'Canva Graphic Design',
-      description:
-        'A collection of creative design work including professional forms, posters, newspaper-style graphics, thumbnails, social media designs, and custom client-oriented visuals.',
-      stack: 'Canva, Graphic Design, Visual Design',
-    },
-  ]
+  const closeMenu = () => setMenuOpen(false)
+  const activeCase = activeProject < projects.length ? projects[activeProject] : null
 
   return (
-    <>
-      <div className="page-background" aria-hidden="true">
-        <GalaxyCanvas />
-      </div>
-
-      <div className="page-shell">
-        <nav className="site-nav" aria-label="Main navigation">
-          <a className="site-nav__brand" href="#home" aria-label="Kunal Sarkar home">KS<span>.</span></a>
-          <div className="site-nav__links">
-            <a href="#about">About</a>
-            <a href="#skills">Skills</a>
-            <a href="#projects">Projects</a>
-            <a href="#contact">Contact</a>
-          </div>
-          <a className="site-nav__availability" href="#contact"><span aria-hidden="true" /> Open to opportunities</a>
+    <div className="site-frame" id="top">
+      <a className="skip-link" href="#main">Skip to content</a>
+      <header className="site-header">
+        <a className="wordmark" href="#top" aria-label="Kunal Sarkar, home">
+          KS<span className="wordmark__dot">.</span>
+          <span className="wordmark__descriptor">web · AI · design</span>
+        </a>
+        <nav className={`site-nav ${menuOpen ? 'site-nav--open' : ''}`} aria-label="Main navigation">
+          <a href="#work" onClick={closeMenu}><span>01</span> Work</a>
+          <a href="#services" onClick={closeMenu}><span>02</span> Services</a>
+          <a href="#about" onClick={closeMenu}><span>03</span> About</a>
+          <a href="#contact" onClick={closeMenu}><span>04</span> Contact</a>
         </nav>
+        <div className="header-actions">
+          <button className="command-trigger" type="button" onClick={() => setCommandOpen(true)} aria-label="Open quick navigation">
+            <span>⌘K</span>
+          </button>
+          <a className="header-contact" href="#contact">Let’s talk <span aria-hidden="true">↗</span></a>
+          <button className="menu-toggle" type="button" onClick={() => setMenuOpen((open) => !open)} aria-expanded={menuOpen} aria-label={menuOpen ? 'Close menu' : 'Open menu'}>
+            {menuOpen ? 'Close −' : 'Menu +'}
+          </button>
+        </div>
+      </header>
 
-        {/* HERO */}
-        <header className="hero" id="home">
-          <div className="hero__badge">
-            BCA Student • Developer • Designer
+      <main id="main">
+        <section className="hero-section" aria-labelledby="hero-title">
+          <div className="hero-topline">
+            <span>Kunal Sarkar · BCA student & builder</span>
+            <span className="availability"><i aria-hidden="true" /> Open to projects & opportunities</span>
           </div>
-
-          <div className="hero__profile">
-            <img
-              src={profilePic}
-              alt="Kunal Sarkar"
-              className="profile-pic"
-            />
-          </div>
-
-          <h1>
-            Kunal Sarkar
-            <span>
-              Building practical digital experiences while learning every day.
-            </span>
-          </h1>
-
-          <p>
-            I am a Bachelor of Computer Applications student at BPPIMT,
-            Salt Lake. I enjoy building web applications, exploring
-            machine learning, and creating visually engaging designs.
-          </p>
-
-          <div className="hero__actions">
-            <a href="#projects">View Projects</a>
-            <a href="#contact" className="ghost">
-              Contact Me
-            </a>
-          </div>
-        </header>
-
-        <main>
-          {/* ABOUT */}
-          <section
-            className="about-section"
-            id="about"
-            ref={aboutRef}
-          >
-            <div className="about-container">
-              <div className="about-left">
-                <h2>
-                  BCA Student & <span>Tech Enthusiast</span>
-                </h2>
-
-                <p>
-                  I'm a Bachelor of Computer Applications (BCA) student
-                  at B.P. Poddar Institute of Management and Technology,
-                  with an interest in web development, machine learning,
-                  generative AI, and software development.
-                </p>
-
-                <p>
-                  I enjoy turning ideas into practical projects and
-                  continuously improving my programming and development
-                  skills through hands-on work.
-                </p>
-
-                <div className="about-info-grid">
-                  <div className="info-item">
-                    <label>Name:</label>
-                    <p>Kunal Sarkar</p>
-                  </div>
-
-                  <div className="info-item">
-                    <label>College:</label>
-                    <p>
-                      B.P. Poddar Institute of Management and Technology
-                    </p>
-                  </div>
-
-                  <div className="info-item">
-                    <label>Stream:</label>
-                    <p>BCA</p>
-                  </div>
-
-                  <div className="info-item">
-                    <label>Session:</label>
-                    <p>2024–2028</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="about-right">
-                <div className="expertise-grid">
-                  <div className="expertise-card">
-                    <div className="expertise-icon">
-                      <span className="skill-badge">HTML</span>
-                    </div>
-                    <h3>HTML</h3>
-                    <p>
-                      Structured and semantic web page development.
-                    </p>
-                  </div>
-
-                  <div className="expertise-card">
-                    <div className="expertise-icon">
-                      <span className="skill-badge">CSS</span>
-                    </div>
-                    <h3>CSS</h3>
-                    <p>
-                      Responsive layouts and modern visual styling.
-                    </p>
-                  </div>
-
-                  <div className="expertise-card">
-                    <div className="expertise-icon">
-                      <span className="skill-badge">JS</span>
-                    </div>
-                    <h3>JavaScript</h3>
-                    <p>
-                      Interactive interfaces and web functionality.
-                    </p>
-                  </div>
-
-                  <div className="expertise-card">
-                    <div className="expertise-icon">
-                      <span className="skill-badge">PY</span>
-                    </div>
-                    <h3>Python</h3>
-                    <p>
-                      Backend development, automation, data and ML.
-                    </p>
-                  </div>
-
-                  <div className="expertise-card">
-                    <div className="expertise-icon">
-                      <span className="skill-badge">ML</span>
-                    </div>
-                    <h3>Machine Learning</h3>
-                    <p>
-                      Practical ML pipelines and prediction systems.
-                    </p>
-                  </div>
-                </div>
+          <div className="hero-grid">
+            <div className="hero-copy">
+              <p className="eyebrow"><span className="eyebrow-index">01 / INTRO</span> Ideas into working things.</p>
+              <h1 id="hero-title">I make the<br /><em>hard parts</em><br />make sense<span className="heading-period">.</span></h1>
+              <p className="hero-lede">Web development, AI experiments, and thoughtful design — built one useful detail at a time.</p>
+              <div className="hero-actions">
+                <a className="button-primary" href="#work">Explore selected work <span aria-hidden="true">↓</span></a>
+                <a className="text-link" href="#about">A little about me <span aria-hidden="true">↗</span></a>
               </div>
             </div>
-          </section>
+            <div className="terrain-card" aria-label="Abstract technical wireframe illustration">
+              <div className="terrain-card__top"><span>FIG. 01 — THINK / MAKE / REFINE</span><span className="live-mark">● LIVE STUDY</span></div>
+              <svg className="terrain-svg" viewBox="0 0 560 490" role="img" aria-labelledby="terrain-title">
+                <title id="terrain-title">A wireframe terrain rising from a technical grid</title>
+                <defs>
+                  <pattern id="terrainGrid" width="24" height="24" patternUnits="userSpaceOnUse">
+                    <path d="M 24 0 L 0 0 0 24" fill="none" stroke="currentColor" strokeOpacity=".16" strokeWidth=".7" />
+                  </pattern>
+                  <linearGradient id="terrainFill" x1="0" x2="1" y1="0" y2="1">
+                    <stop offset="0%" stopColor="#b7cf88" stopOpacity=".42" />
+                    <stop offset="100%" stopColor="#b7cf88" stopOpacity=".02" />
+                  </linearGradient>
+                </defs>
+                <rect width="560" height="490" fill="url(#terrainGrid)" />
+                <g className="terrain-contours" fill="none" stroke="currentColor" strokeWidth="1.2">
+                  <path d="M-10 337 C76 322 92 277 160 283 S244 335 305 283 395 194 470 224 536 209 570 183" />
+                  <path d="M-10 359 C76 344 102 300 165 305 S245 357 311 306 399 218 474 246 540 231 570 206" />
+                  <path d="M-10 382 C83 365 112 323 171 328 S250 380 318 330 406 241 480 269 545 255 570 229" />
+                  <path d="M-10 406 C88 388 120 347 178 351 S257 404 326 354 413 264 486 293 548 278 570 254" />
+                  <path d="M-10 430 C93 412 128 370 185 375 S263 428 333 378 420 288 492 316 551 302 570 279" />
+                  <path d="M-10 454 C100 436 137 394 192 398 S270 452 341 402 427 312 498 340 554 326 570 304" />
+                </g>
+                <path className="terrain-mountain" d="M-10 336 C76 322 92 277 160 283 S244 335 305 283 395 194 470 224 536 209 570 183 L570 490 L-10 490 Z" fill="url(#terrainFill)" />
+                <g className="terrain-ridge" fill="none" stroke="#77955b" strokeWidth="1.4">
+                  <path d="M160 283 L199 242 222 258 270 185 294 213 334 156 361 190 394 145 422 180 470 224" />
+                  <path d="M199 242 L210 283 M270 185 L279 250 M334 156 L341 224 M394 145 L401 209" strokeDasharray="3 5" />
+                </g>
+                <g className="terrain-points" fill="#77955b">
+                  <circle cx="270" cy="185" r="4" /><circle cx="334" cy="156" r="4" /><circle cx="394" cy="145" r="4" />
+                </g>
+                <g className="terrain-labels" fill="currentColor" fontSize="10" letterSpacing="1.4">
+                  <text x="22" y="34">IDEA / 001</text><text x="398" y="52">BUILD SYSTEMS</text><text x="22" y="466">ROUGH TERRAIN → CLEAR PATH</text>
+                </g>
+                <path className="terrain-crosshair" d="M438 118 h20 M448 108 v20" stroke="currentColor" strokeWidth="1" />
+              </svg>
+              <div className="terrain-card__bottom"><span>BUILD WITH INTENT</span><span>22°34′ N · KOLKATA, IN</span></div>
+            </div>
+          </div>
+          <div className="hero-bottomline"><span>Mapping ideas to implementation.</span><span>Scroll to explore <span className="scroll-arrow">↓</span></span></div>
+        </section>
 
-          {/* EDUCATION + SKILLS */}
-          <section className="grid-two">
-            <article
-              className="card"
-              id="education"
-              ref={eduRef}
-            >
-              <h2>Education</h2>
+        <section className="manifesto section-rule" aria-labelledby="manifesto-title">
+          <div className="section-label"><span>02</span> / THE APPROACH</div>
+          <div className="manifesto-content">
+            <h2 id="manifesto-title">Keep the idea.<br />Change what gets<br /><em>in its way.</em></h2>
+            <div className="manifesto-note">
+              <span className="note-mark">↳ FIELD NOTE 001</span>
+              <p>I like solving the bit that makes a project feel difficult: the confusing workflow, the stubborn bug, the gap between a good idea and something people can actually use.</p>
+              <p>Sometimes that means code. Sometimes it means simplifying the interface. Usually, it means asking one better question first.</p>
+            </div>
+          </div>
+          <div className="manifesto-footer"><span>CLARITY OVER COMPLEXITY</span><span>PROCESS / 01—03</span></div>
+        </section>
 
-              <div className="timeline-item">
-                <h3>
-                  Bachelor of Computer Applications (BCA)
-                </h3>
-
-                <p>
-                  B.P. Poddar Institute of Management and Technology,
-                  Salt Lake
-                </p>
-
-                <span>2024–2028 • Current Student</span>
+        <section ref={signatureRef} className="signature-section" aria-labelledby="signature-title">
+          <div className="signature-stage">
+            <div className="signature-stage__heading">
+              <div>
+                <div className="section-label"><span>03</span> / SIGNATURE STUDY</div>
+                <h2 id="signature-title">A name becomes<br /><em>a system.</em></h2>
               </div>
-            </article>
+              <p>Scroll to assemble the KS mark: first the stem, then the diagonals, then the final form. Design should feel intentional before it feels finished.</p>
+            </div>
+            <div className="signature-board">
+              <svg className="signature-svg" viewBox="0 0 1000 520" role="img" aria-label="The KS monogram is constructed from geometric letterforms, guide lines, and measured diagonals.">
+                <defs>
+                  <clipPath id="letterKReveal" clipPathUnits="userSpaceOnUse">
+                    <rect id="letterKMask" x="0" y="0" width="490" height="520" />
+                  </clipPath>
+                  <clipPath id="letterSReveal" clipPathUnits="userSpaceOnUse">
+                    <rect id="letterSMask" x="0" y="0" width="850" height="520" />
+                  </clipPath>
+                </defs>
+                <path className="signature-guide signature-diagonal" d="M120 470 L650 65" />
+                <path className="signature-guide signature-diagonal" d="M315 65 L830 470" />
+                <line className="signature-crosshair" x1="0" y1="260" x2="1000" y2="260" />
+                <line className="signature-crosshair" x1="500" y1="0" x2="500" y2="520" />
+                <line className="signature-guide--stem" x1="253" y1="90" x2="253" y2="420" />
+                <text className="signature-letter signature-letter--outline" x="220" y="365">K</text>
+                <text className="signature-letter signature-letter--outline" x="470" y="365">S</text>
+                <text className="signature-letter signature-letter--solid" clipPath="url(#letterKReveal)" x="220" y="365">K</text>
+                <text className="signature-letter signature-letter--solid" clipPath="url(#letterSReveal)" x="470" y="365">S</text>
+                <circle className="signature-anchor" cx="253" cy="260" r="5" />
+                <circle className="signature-anchor" cx="650" cy="65" r="5" />
+                <circle className="signature-anchor" cx="830" cy="470" r="5" />
+                <g className="signature-annotations">
+                  <text className="signature-measure" x="274" y="103">STEM = 1U</text>
+                  <text className="signature-measure" x="673" y="91">45° / CONSTRUCTION</text>
+                  <text className="signature-measure" x="670" y="446">KS / IDENTITY SYSTEM</text>
+                </g>
+              </svg>
+              <div className="signature-board__caption"><span>FORM STUDY <strong>— 001</strong></span><span>GEOMETRY · LETTER · IDENTITY</span></div>
+            </div>
+            <div className="signature-footer"><span><i /> SCROLL-DRIVEN CONSTRUCTION</span><span>FROM SHAPE TO SIGNATURE ↓</span></div>
+          </div>
+        </section>
 
-            <article
-              className="card"
-              id="skills"
-              ref={skillsRef}
-            >
-              <h2>Skills</h2>
+        <section ref={workStoryRef} className="work-story-section" id="work" aria-labelledby="work-title">
+          <div className="work-story-stage">
+            <div className="work-story-head">
+              <div>
+                <div className="section-label"><span>04</span> / SELECTED WORK</div>
+                <h2 id="work-title">Things I’ve been<br /><em>building.</em></h2>
+              </div>
+              <p className="work-story-head__note">Every project, in one view. Keep scrolling to inspect each build, its role, the tools behind it, and the problem it explores.</p>
+            </div>
 
-              <ul className="pill-list">
-                {skills.map((skill) => (
-                  <li key={skill}>{skill}</li>
-                ))}
-              </ul>
-            </article>
-          </section>
-
-          {/* PROJECTS */}
-          <section
-            className="card"
-            id="projects"
-            ref={projectsRef}
-          >
-            <h2>Projects & Creative Work</h2>
-
-            <div className="project-grid">
-              {projects.map((project) => (
-                <article
-                  className={`project-card ${
-                    project.featured ? 'project-card--featured' : ''
-                  }`}
-                  key={project.title}
-                >
-                  {project.featured && (
-                    <div className="project-card__visual" aria-hidden="true">
-                      <svg viewBox="0 0 48 48" fill="none">
-                        <rect
-                          x="5"
-                          y="8"
-                          width="38"
-                          height="31"
-                          rx="6"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        />
-                        <path
-                          d="m14 19 5 4-5 4m9 0h8"
-                          stroke="currentColor"
-                          strokeWidth="2.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M11 13h26"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                        />
-                      </svg>
-                    </div>
-                  )}
-
-                  <div className="project-card__body">
-                    {project.category && (
-                      <div className="project-card__meta">
-                        <span>{project.category}</span>
-                        <span className="project-card__status">
-                          Featured project
-                        </span>
-                      </div>
+            <div className="work-story-layout">
+              <aside className="project-details-panel" aria-live="polite" aria-atomic="true">
+                {activeCase ? (
+                  <div className="project-details-enter" key={activeProject}>
+                    <div className="project-details-panel__index">{activeCase.number} / 05 — CASE STUDY</div>
+                    <div className="project-details-panel__kind">{activeCase.kind}</div>
+                    <h3>{activeCase.title}</h3>
+                    <p>{activeCase.description}</p>
+                    <ul className="tag-list">{activeCase.stack.map((item) => <li key={item}>{item}</li>)}</ul>
+                    {activeCase.link ? (
+                      <a className="case-link" href={activeCase.link} target="_blank" rel="noreferrer">Explore project <span aria-hidden="true">↗</span></a>
+                    ) : (
+                      <span className="work-note">Selected work / learning in progress</span>
                     )}
-
-                    <h3>{project.title}</h3>
-
-                    <p>{project.description}</p>
-
-                    {project.note && (
-                      <p className="project-card__note">{project.note}</p>
-                    )}
-
-                    <div className="project-card__footer">
-                      {project.technologies ? (
-                        <ul className="project-card__tags">
-                          {project.technologies.map((technology) => (
-                            <li key={technology}>{technology}</li>
-                          ))}
-                        </ul>
-                      ) : (
-                        <span>{project.stack}</span>
-                      )}
-
-                      {project.github && (
-                        <a
-                          className="project-card__link"
-                          href={project.github}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          View on GitHub <span aria-hidden="true">↗</span>
-                        </a>
-                      )}
-                    </div>
                   </div>
-                </article>
-              ))}
-            </div>
-          </section>
-
-          {/* CONTACT */}
-          <section
-            className="contact-section"
-            id="contact"
-            ref={contactRef}
-          >
-            <div className="contact-header">
-              <h2>
-                Get In <span>Touch</span>
-              </h2>
-
-              <p>
-                Have a project in mind or want to collaborate?
-                I'd love to hear from you. Let's create something
-                useful and interesting together!
-              </p>
-            </div>
-
-            <div className="contact-container">
-              <div className="contact-left">
-                <div className="contact-card">
-                  <h3>Let's Connect</h3>
-
-                  <p>
-                    I'm open to discussing projects, design work,
-                    development opportunities, and interesting
-                    technology ideas.
-                  </p>
-
-                  <div className="contact-email-box">
-                    <div className="email-icon">✉️</div>
-
-                    <div>
-                      <h4>Email</h4>
-
-                      <a href="mailto:kunalsarkar61570@gmail.com">
-                        kunalsarkar61570@gmail.com
-                      </a>
-                    </div>
+                ) : (
+                  <div className="project-details-enter project-profile-detail" key="profile">
+                    <div className="project-details-panel__index">06 / THE BUILDER</div>
+                    <div className="profile-detail__portrait"><img src={profilePic} alt="Kunal Sarkar" /></div>
+                    <div className="project-details-panel__kind">BCA STUDENT · WEB / AI / DESIGN</div>
+                    <h3>Kunal<br /><em>Sarkar.</em></h3>
+                    <p>I’m a Kolkata-based student and builder who likes turning complicated ideas into clear, useful digital experiences.</p>
+                    <div className="profile-detail__facts"><span>KOLKATA, INDIA</span><span>LEARN · BUILD · REFINE</span></div>
+                    <a className="case-link" href="#about">Meet me properly <span aria-hidden="true">↗</span></a>
                   </div>
-                </div>
+                )}
+              </aside>
 
-                <div className="contact-card">
-                  <h3>Follow Me</h3>
-
-                  <div className="social-links">
-                    <a
-                      href="https://github.com/sparkz8085"
-                      target="_blank"
-                      rel="noreferrer"
-                      title="GitHub"
-                    >
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                      >
-                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                      </svg>
-                    </a>
-
-                    <a
-                      href="https://www.linkedin.com"
-                      target="_blank"
-                      rel="noreferrer"
-                      title="LinkedIn"
-                    >
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                      >
-                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.475-2.236-1.666-2.236-1.017 0-1.624.683-1.89 1.346-.097.237-.122.568-.122.899v5.56h-3.555v-11.3h3.555v1.545c.477-.734 1.332-1.78 3.241-1.78 2.366 0 4.14 1.545 4.14 4.87v6.665zM5.337 9.433c-1.144 0-2.063-.931-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.134-.925 2.065-2.064 2.065zm1.782 11.019H3.555V8.152h3.564v12.3zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                      </svg>
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              {/* CONTACT FORM */}
-              <div className="contact-right">
-                <div className="contact-card form-card">
-                  <div className="form-header">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                    </svg>
-
-                    <h3>Send Message</h3>
-                  </div>
-
-                  <p>
-                    Fill out the form below and I'll get back to
-                    you as soon as possible.
-                  </p>
-
-                  <form
-                    className="contact-form"
-                    ref={formRef}
-                    onSubmit={handleSubmit}
+              <div className="project-wall" aria-label="All selected projects and profile">
+                {projects.map((project, index) => (
+                  <button
+                    className={'project-tile ' + (activeProject === index ? 'project-tile--active' : '')}
+                    type="button"
+                    key={project.number}
+                    aria-pressed={activeProject === index}
+                    onClick={() => setActiveProject(index)}
                   >
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label>Name *</label>
-
-                        <input
-                          type="text"
-                          name="user_name"
-                          placeholder="Your full name"
-                          required
-                        />
-                      </div>
-
-                      <div className="form-group">
-                        <label>Email *</label>
-
-                        <input
-                          type="email"
-                          name="user_email"
-                          placeholder="johndoe@example.com"
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    <div className="form-group">
-                      <label>Subject *</label>
-
-                      <input
-                        type="text"
-                        name="subject"
-                        placeholder="What's this about?"
-                        required
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label>Message *</label>
-
-                      <textarea
-                        name="message"
-                        placeholder="Tell me about your project or just say hello!"
-                        rows="6"
-                        required
-                      />
-                    </div>
-
-                    <button
-                      type="submit"
-                      className="submit-btn"
-                    >
-                      <span>→</span> Send Message
-                    </button>
-                  </form>
-                </div>
+                    <span className="project-tile__index"><span>CASE / {project.number}</span><b>{activeProject === index ? 'ACTIVE' : 'OPEN'}</b></span>
+                    <span className={'project-art project-art--' + (index + 1)} aria-hidden="true">
+                      <span className="project-art__label">{['SOURCE / 001', 'SEGMENTS / 002', 'WORKFLOW / 003', 'COMPOSITION / 004', 'INTERFACE / 005'][index]}</span>
+                      {index === 0 && <span className="art-terminal"><span>$ php runner</span><br /><span>01&nbsp; compile()</span><br /><span>02&nbsp; execute()</span><i /></span>}
+                      {index === 1 && <span className="art-node-map"><i /><i /><i /><i /></span>}
+                      {index === 2 && <span className="art-dashboard"><i /><i /><i /><i /></span>}
+                      {index === 3 && <span className="art-poster"><span>VISUAL STUDY / 24</span><b>IDEA<br />→ FORM</b><span>LAYOUT / SYSTEM</span></span>}
+                      {index === 4 && <span className="art-browser"><span className="art-browser__bar"><i /><i /><i /></span><span className="art-browser__body"><i /><i /><i /><i /></span></span>}
+                    </span>
+                    <span className="project-tile__title"><strong>{project.title}</strong><span>{project.number} ↗</span></span>
+                    <span className="project-tile__kind">{project.kind}</span>
+                  </button>
+                ))}
+                <button
+                  className={'project-tile profile-tile ' + (activeProject === projects.length ? 'project-tile--active' : '')}
+                  type="button"
+                  aria-pressed={activeProject === projects.length}
+                  onClick={() => setActiveProject(projects.length)}
+                >
+                  <span className="project-tile__index"><span>PROFILE / 006</span><b>{activeProject === projects.length ? 'ACTIVE' : 'ABOUT'}</b></span>
+                  <span className="profile-tile__art" aria-hidden="true"><img src={profilePic} alt="" /></span>
+                  <span className="project-tile__title"><strong>Kunal Sarkar</strong><span>06 ↗</span></span>
+                  <span className="project-tile__kind">The person behind the projects</span>
+                </button>
               </div>
             </div>
-          </section>
-        </main>
 
-        <footer className="footer">
-          <p>
-            &copy; 2026 Kunal Sarkar. All rights reserved.
-          </p>
-        </footer>
-      </div>
-    </>
+            <div className="work-story-footer">
+              <span className="story-footer__status"><i /> SCROLL TO INSPECT</span>
+              <div
+                className="story-progress"
+                role="progressbar"
+                aria-label="Portfolio story progress"
+                aria-valuemin={1}
+                aria-valuemax={projects.length + 1}
+                aria-valuenow={activeProject + 1}
+              >
+                <span style={{ width: String(((activeProject + 1) / (projects.length + 1)) * 100) + '%' }} />
+              </div>
+              <span className="story-footer__count">{String(activeProject + 1).padStart(2, '0')} / 06</span>
+            </div>
+          </div>
+        </section>
+
+        <section className="services-section section-rule" id="services" aria-labelledby="services-title">
+          <div className="section-heading">
+            <div><div className="section-label"><span>05</span> / WHAT I EXPLORE</div><h2 id="services-title">A few ways<br /><em>I can help.</em></h2></div>
+            <p>Curious by default. Focused on making useful things, learning the craft, and collaborating well.</p>
+          </div>
+          <div className="capability-list">
+            {capabilities.map(([number, title, description]) => (
+              <article className="capability" key={number}>
+                <span className="capability-number">{number}</span><h3>{title}</h3><p>{description}</p><span className="capability-arrow" aria-hidden="true">↗</span>
+              </article>
+            ))}
+          </div>
+          <div className="toolbox"><span className="toolbox-label">CURRENT TOOLBOX</span><div>{['React', 'JavaScript', 'Python', 'FastAPI', 'Django', 'MongoDB', 'Git & GitHub', 'Canva', 'Linux'].map((skill) => <span key={skill}>{skill}</span>)}</div></div>
+        </section>
+
+        <section className="about-section section-rule" id="about" aria-labelledby="about-title">
+          <div className="section-label"><span>06</span> / A LITTLE ABOUT ME</div>
+          <div className="about-layout">
+            <div className="about-portrait"><img src={profilePic} alt="Portrait of Kunal Sarkar" /><span>THE HUMAN BEHIND THE SCREEN</span></div>
+            <div className="about-copy"><h2 id="about-title">Student now.<br /><em>Builder always.</em></h2><p>I’m Kunal, a BCA student at B.P. Poddar Institute of Management and Technology in Kolkata. I enjoy web development, machine learning, AI, and visual design — especially where they meet in a useful project.</p><p>I learn best by making things, breaking down problems, and refining the result. I’m still exploring, and that’s part of the point.</p><div className="about-facts"><div><span>BASED IN</span><strong>Kolkata, India</strong></div><div><span>STUDYING</span><strong>BCA · 2024—2028</strong></div><div><span>ALSO INTO</span><strong>Linux · Design · AI</strong></div></div><a className="text-link" href="https://github.com/sparkz8085" target="_blank" rel="noreferrer">More on GitHub <span aria-hidden="true">↗</span></a></div>
+          </div>
+        </section>
+
+        <section className="process-section section-rule" aria-labelledby="process-title">
+          <div className="section-heading"><div><div className="section-label"><span>07</span> / HOW I WORK</div><h2 id="process-title">Small steps.<br /><em>Good outcomes.</em></h2></div><p>Not every project needs a grand plan. It does need a clear problem, a feedback loop, and care for the details.</p></div>
+          <div className="process-grid">{steps.map(([number, title, description]) => <article className="process-step" key={number}><span>{number}</span><h3>{title}</h3><p>{description}</p></article>)}</div>
+        </section>
+
+        <section className="contact-section section-rule" id="contact" aria-labelledby="contact-title">
+          <div className="contact-intro"><div className="section-label"><span>08</span> / NEXT UP</div><h2 id="contact-title">What are you<br /><em>building?</em></h2><p>Have a project idea, want to collaborate, or just want to talk tech? Send a note.</p><a className="contact-email" href="mailto:kunalsarkar61570@gmail.com">kunalsarkar61570@gmail.com <span aria-hidden="true">↗</span></a></div>
+          <form className="contact-form" ref={formRef} onSubmit={handleSubmit}>
+            <label htmlFor="user_name">Your name</label><input id="user_name" type="text" name="user_name" placeholder="What should I call you?" required />
+            <label htmlFor="user_email">Email address</label><input id="user_email" type="email" name="user_email" placeholder="you@example.com" required />
+            <label htmlFor="subject">What’s this about?</label><input id="subject" type="text" name="subject" placeholder="A project, an idea, a question…" required />
+            <label htmlFor="message">A little more detail</label><textarea id="message" name="message" rows="4" placeholder="Tell me a little about it…" required />
+            <button className="button-primary submit-button" type="submit" disabled={sending}>{sending ? 'Sending…' : 'Send the note'} <span aria-hidden="true">↗</span></button>
+            {messageState && <p className="form-status" role="status">{messageState}</p>}
+          </form>
+        </section>
+      </main>
+
+      <footer className="site-footer"><a className="wordmark" href="#top">KS<span className="wordmark__dot">.</span></a><span>Designed with curiosity · Built in Kolkata</span><a href="#top">Back to top ↑</a><span>© {new Date().getFullYear()} Kunal Sarkar</span></footer>
+
+      {commandOpen && <div className="command-overlay" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setCommandOpen(false) }}><section className="command-panel" role="dialog" aria-modal="true" aria-labelledby="command-title"><div className="command-panel__top"><span id="command-title">QUICK NAVIGATION</span><button type="button" onClick={() => setCommandOpen(false)} aria-label="Close quick navigation">ESC ✕</button></div>{[['#work', '01 / Selected work'], ['#services', '02 / Capabilities'], ['#about', '03 / About me'], ['#contact', '04 / Contact']].map(([href, label]) => <a key={href} href={href} onClick={() => setCommandOpen(false)}>{label}<span>↗</span></a>)}<p>TIP · PRESS ESC TO CLOSE</p></section></div>}
+    </div>
   )
 }
 

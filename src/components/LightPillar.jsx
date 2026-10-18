@@ -27,15 +27,11 @@ const LightPillar = ({
   const mouseRef = useRef(new THREE.Vector2(0, 0));
   const timeRef = useRef(0);
   const rotationSpeedRef = useRef(rotationSpeed);
-  const [webGLSupported, setWebGLSupported] = useState(true);
-
-  useEffect(() => {
+  const [webGLSupported, setWebGLSupported] = useState(() => {
+    if (typeof document === 'undefined') return true;
     const canvas = document.createElement('canvas');
-    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-    if (!gl) {
-      setWebGLSupported(false);
-    }
-  }, []);
+    return Boolean(canvas.getContext('webgl') || canvas.getContext('experimental-webgl'));
+  });
 
   useEffect(() => {
     if (!containerRef.current || !webGLSupported) return;
@@ -80,8 +76,8 @@ const LightPillar = ({
         stencil: false,
         depth: false
       });
-    } catch (error) {
-      setWebGLSupported(false);
+    } catch {
+      queueMicrotask(() => setWebGLSupported(false));
       return;
     }
 
@@ -305,6 +301,9 @@ const LightPillar = ({
       geometryRef.current = null;
       rafRef.current = null;
     };
+  // The renderer is recreated only when WebGL availability or quality changes;
+  // dedicated effects below update the shader uniforms without rebuilding it.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [webGLSupported, quality]);
 
   useEffect(() => {
