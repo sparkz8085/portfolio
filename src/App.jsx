@@ -374,6 +374,8 @@ function App() {
                 role="img"
                 aria-label="Interactive topographic terrain: move the pointer to inspect coordinates and ridge points."
                 onPointerMove={handleTerrainPointerMove}
+                onPointerDown={handleTerrainPointerMove}
+                onClick={handleTerrainPointerMove}
                 onPointerLeave={handleTerrainPointerLeave}
               >
                 <defs>
