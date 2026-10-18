@@ -543,6 +543,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .signature-annotations { opacity: 1; transform: none; }
   .signature-guide { stroke-dashoffset: 0; }
   .signature-guide--stem { transform: scaleY(1); }
+  .geometry-circle, .geometry-dimension, .geometry-angle-arc { stroke-dashoffset: 0; }
+  .geometry-extension { opacity: 1; }
   .work-story-section { height: auto; }
   .work-story-stage { position: relative; top: auto; height: auto; min-height: 0; padding: 4.5rem 0; overflow: visible; }
   .work-story-head { align-items: start; flex-direction: column; gap: .8rem; }
@@ -594,6 +596,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .signature-annotations { opacity: 1; transform: none; }
   .signature-guide { stroke-dashoffset: 0; }
   .signature-guide--stem { transform: scaleY(1); }
+  .geometry-circle, .geometry-dimension, .geometry-angle-arc { stroke-dashoffset: 0; }
+  .geometry-extension { opacity: 1; }
   .project-tile, .story-progress span { transition: none; }
   .project-details-enter { animation: none; }
 }
