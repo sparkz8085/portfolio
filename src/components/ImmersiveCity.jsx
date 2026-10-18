@@ -133,10 +133,10 @@ export default function ImmersiveCity() {
   }
 
   return <>
-    <section className={'immersive-city ic-weather-' + theme} aria-label="Interactive portfolio journey">
+    <section className={'immersive-city ic-weather-' + theme} style={{ '--ic-night': night, '--ic-progress': progress }} aria-label="Interactive portfolio journey">
       <div className="ic-sticky">
         <div className="ic-sky" aria-hidden="true">
-          <div className="ic-sun" style={{ top: (12 + night * 28) + '%' }} />
+          <div className="ic-sun" style={{ top: (12 + night * 28) + '%', opacity: 1 - night }} />
           <div className="ic-moon" style={{ top: (44 - night * 30) + '%', opacity: night }} />
           <div className="ic-cloud ic-cloud--one" /><div className="ic-cloud ic-cloud--two" />
           <div className="ic-rain"><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /></div>
@@ -156,7 +156,7 @@ export default function ImmersiveCity() {
           <div className="ic-halo" /><img src={profilePic} alt="Kunal Sarkar" />
           <div className="ic-name"><span>THE PERSON BEHIND THE BUILDS</span><b>Kunal Sarkar</b></div>
         </div>
-        <div className="ic-city" style={{ opacity: city, transform: 'translateY(' + ((1 - city) * 8) + '%)' }} aria-label="Three Kolkata-inspired buildings, with project screens in two">
+        <div className="ic-city" style={{ opacity: city, transform: 'translateY(' + ((1 - city) * 8) + '%) scale(' + (.96 + city * .04) + ')' }} aria-label="Three Kolkata-inspired buildings, with project screens in two">
           <div className="ic-distant ic-distant--left" /><div className="ic-distant ic-distant--right" />
           <div className="ic-building ic-building--left">
             <div className="ic-cornice" /><div className="ic-sign">KUNAL'S WORKS</div>
