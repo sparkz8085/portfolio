@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import './ImmersiveCity.css'
 import profilePic from '../assets/profile.jpg'
 
@@ -70,6 +70,7 @@ export default function ImmersiveCity() {
   const [welcomeFinished, setWelcomeFinished] = useState(false)
   const [weather, setWeather] = useState({ theme: 'cloudy', temp: null, location: 'Kolkata' })
   const [activeProject, setActiveProject] = useState(null)
+  const closeProject = useCallback(() => setActiveProject(null), [])
   const theme = weather.theme
 
   useEffect(() => {
@@ -188,6 +189,6 @@ export default function ImmersiveCity() {
         <div className="ic-progress"><span>SCROLL TO MOVE THROUGH THE CITY</span><i><b style={{ transform: 'scaleX(' + progress + ')' }} /></i><span>{String(Math.round(progress * 100)).padStart(2, '0')}%</span></div>
       </div>
     </section>
-    <DetailModal project={activeProject} close={() => setActiveProject(null)} />
+    <DetailModal project={activeProject} close={closeProject} />
   </>
 }
