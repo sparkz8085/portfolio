@@ -11,3 +11,25 @@
 @keyframes ic-word-in{from{opacity:0;transform:translateY(12px);filter:blur(5px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}@keyframes ic-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}@keyframes ic-halo{0%,100%{transform:translateX(-50%) scale(1);opacity:.7}50%{transform:translateX(-50%) scale(1.08);opacity:1}}@keyframes ic-drift{from{transform:translateX(-15%)}to{transform:translateX(45vw)}}@keyframes ic-rain{from{transform:translateY(-10vh) rotate(16deg)}to{transform:translate(-4vw,110vh) rotate(16deg)}}@keyframes ic-fade{from{opacity:0}to{opacity:1}}@keyframes ic-modal-in{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
 @media(max-width:700px){.immersive-city{height:440vh}.ic-sticky{min-height:530px}.ic-topbar{padding:.9rem 1rem;gap:.4rem}.ic-index{display:none}.ic-weather{font-size:.62rem;max-width:76%;gap:.35rem}.ic-weather button{font-size:.6rem;padding:.3rem .5rem}.ic-building--left{left:-3%;width:35%;height:34%;bottom:12%;min-height:190px}.ic-building--middle{left:31%;width:36%;height:42%;bottom:12%;min-height:225px}.ic-building--right{right:-3%;width:35%;height:32%;bottom:12%;min-height:180px}.ic-sign{font-size:.42rem;letter-spacing:.05em;padding:3px}.ic-windows{gap:5px;padding:9px 8%}.ic-windows i{height:16px;border-width:2px}.ic-building--middle .ic-windows i{height:18px}.ic-screen{margin:3px 5% 5px;border-width:3px;padding:3px;gap:3px}.ic-screen small,.ic-screen>span{font-size:.34rem}.ic-screen>b{font-size:.44rem}.ic-screen .ic-preview{height:34px}.ic-preview__top{height:12px}.ic-preview__top span{font-size:5px}.ic-metrics{padding:3px;gap:3px}.ic-metrics b{font-size:8px}.ic-bars{height:15px;margin:0 4px}.ic-lines{padding:3px;gap:2px}.ic-lines i{height:2px}.ic-code{font-size:5px;padding:3px}.ic-teashop{min-height:34px}.ic-person--one{left:25%}.ic-person--two{left:44%}.ic-person--three{right:23%}.ic-person--four{right:10%}.ic-cycle{top:24%;font-size:.48rem;letter-spacing:.12em}.ic-portrait{top:45%;width:180px}.ic-portrait img{width:140px}.ic-name b{font-size:1.1rem}.ic-next{top:35%}.ic-progress{padding:.8rem 1rem;gap:.5rem;font-size:.45rem}.ic-welcome{top:47%}.ic-language{font-size:.63rem}}
 @media(prefers-reduced-motion:reduce){.immersive-city *, .ic-backdrop,.ic-modal{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+
+/* Scroll choreography polish: warm daylight gradually gives way to blue hour. */
+.ic-sky:before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,#071329 0%,#17233d 55%,#101a2b 100%);opacity:calc(var(--ic-night,0)*.72);transition:opacity .25s linear}
+.ic-sky:after{z-index:2}
+.ic-sun{opacity:calc(1 - var(--ic-night,0));transition:top .25s linear,opacity .25s linear,background 1s}
+.ic-moon{transition:top .25s linear,opacity .25s linear}
+.ic-city{transition:filter .8s}
+.ic-city .ic-building{filter:brightness(calc(1 - var(--ic-night,0)*.25));transition:filter 1s,background 1s}
+.ic-city .ic-windows i{transition:background 1s,box-shadow 1s}
+.ic-city .ic-building__unused{display:none}
+.ic-weather-night .ic-city .ic-windows i,
+.immersive-city[style*="--ic-night: 1"] .ic-city .ic-windows i{box-shadow:inset 0 0 0 1px #ffffff12,0 0 9px #ffd98a25}
+.ic-screen{transition:filter .35s,transform .35s}
+.ic-screen:hover{filter:brightness(1.18);transform:translateY(-2px)}
+.ic-person--one{animation:ic-walk 3.6s ease-in-out infinite alternate}
+.ic-person--two{animation:ic-walk 4.2s ease-in-out -1.4s infinite alternate}
+.ic-person--three{animation:ic-walk 3.8s ease-in-out -2s infinite alternate}
+.ic-person--four{animation:ic-walk 4.5s ease-in-out -.8s infinite alternate}
+.ic-screen:focus-visible,.ic-weather button:focus-visible,.ic-next button:focus-visible,.ic-close:focus-visible,.ic-link:focus-visible{outline:3px solid var(--glow);outline-offset:3px}
+@keyframes ic-walk{from{margin-left:-3px}to{margin-left:5px}}
+@media(prefers-reduced-motion:reduce){.ic-person--one,.ic-person--two,.ic-person--three,.ic-person--four{animation:none}}
