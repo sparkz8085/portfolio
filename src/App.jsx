@@ -31,6 +31,7 @@ const projects = [
     description:
       'A customer segmentation and personality classification project, spanning data preparation, model workflows, API integration, and deployment preparation.',
     stack: ['Python', 'Machine learning', 'FastAPI', 'MongoDB'],
+    link: 'https://github.com/sparkz8085/customer_catagorization_manager',
     symbol: '↗',
   },
   {
