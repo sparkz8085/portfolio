@@ -94,8 +94,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .signature-section {
   position: relative;
   height: 270svh;
-  margin: 0 calc((min(1660px, 100vw - 56px) - 100vw) / 2);
-  padding: 0 max(28px, calc((100vw - 1660px) / 2));
+  margin: 0 calc(50% - 50vw);
+  padding: 0 28px;
   border-bottom: 1px solid var(--line);
   background: #0a0a0a;
 }
@@ -291,6 +291,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .project-details-panel .tag-list li { border-color: rgba(255,255,255,.2); color: #c8c7c0; }
 .project-details-panel .case-link { margin-top: .2rem; border-bottom-color: rgba(255,255,255,.28); }
 .project-details-panel .work-note { color: #8e8d86; }
+.project-profile-detail h3 em { color: var(--accent); }
+.profile-detail__portrait { width: 66px; height: 66px; margin: 0 0 .9rem; overflow: hidden; border: 1px solid var(--accent); border-radius: 50%; }
+.profile-detail__portrait img { display: block; width: 100%; height: 100%; object-fit: cover; filter: grayscale(.25); }
+.profile-detail__facts { display: flex; flex-wrap: wrap; gap: .5rem 1rem; margin: .2rem 0 1rem; color: #93928b; font: .56rem var(--mono); letter-spacing: .045em; }
 .project-details-enter { width: 100%; animation: detail-arrive .4s cubic-bezier(.2,.8,.2,1) both; }
 @keyframes detail-arrive { from { opacity: .25; transform: translateY(13px); } to { opacity: 1; transform: translateY(0); } }
 .project-wall {
@@ -483,6 +487,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .signature-svg { min-height: 300px; }
   .signature-footer { font-size: .52rem; }
   .signature-annotations { opacity: 1; transform: none; }
+  .signature-guide { stroke-dashoffset: 0; }
+  .signature-guide--stem { transform: scaleY(1); }
   .work-story-section { height: auto; }
   .work-story-stage { position: relative; top: auto; height: auto; min-height: 0; padding: 4.5rem 0; overflow: visible; }
   .work-story-head { align-items: start; flex-direction: column; gap: .8rem; }
@@ -531,6 +537,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .signature-section, .work-story-section { height: auto; }
   .signature-stage, .work-story-stage { position: relative; top: auto; height: auto; }
   .signature-annotations { opacity: 1; transform: none; }
+  .signature-guide { stroke-dashoffset: 0; }
+  .signature-guide--stem { transform: scaleY(1); }
   .project-tile, .story-progress span { transition: none; }
   .project-details-enter { animation: none; }
 }
