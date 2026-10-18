@@ -372,12 +372,10 @@ function App() {
                 className="terrain-svg"
                 viewBox="0 0 560 490"
                 role="img"
-                aria-labelledby="terrain-title"
-                aria-description="Move your pointer over the terrain to inspect coordinates, highlight ridge nodes, and shift the contour lines."
+                aria-label="Interactive topographic terrain: move the pointer to inspect coordinates and ridge points."
                 onPointerMove={handleTerrainPointerMove}
                 onPointerLeave={handleTerrainPointerLeave}
               >
-                <title id="terrain-title">Interactive topographic wireframe — hover to inspect coordinates and ridge nodes</title>
                 <defs>
                   <pattern id="terrainGrid" width="24" height="24" patternUnits="userSpaceOnUse">
                     <path d="M 24 0 L 0 0 0 24" fill="none" stroke="currentColor" strokeOpacity=".16" strokeWidth=".7" />
