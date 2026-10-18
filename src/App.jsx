@@ -343,7 +343,7 @@ function App() {
                 <div className="section-label"><span>03</span> / SIGNATURE STUDY</div>
                 <h2 id="signature-title">A name becomes<br /><em>a system.</em></h2>
               </div>
-              <p>Scroll to assemble the KS mark: first the stem, then the diagonals, then the final form. Design should feel intentional before it feels finished.</p>
+              <p>Scroll to assemble the KS mark. Move your pointer across the board to inspect coordinates, snap to anchor nodes, and trace measured geometry.</p>
             </div>
             <div className="signature-board">
               <svg
