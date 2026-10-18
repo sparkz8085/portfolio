@@ -301,6 +301,9 @@ const LightPillar = ({
       geometryRef.current = null;
       rafRef.current = null;
     };
+  // The renderer is recreated only when WebGL availability or quality changes;
+  // dedicated effects below update the shader uniforms without rebuilding it.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [webGLSupported, quality]);
 
   useEffect(() => {
