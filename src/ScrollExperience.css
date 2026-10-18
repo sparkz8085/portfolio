@@ -167,6 +167,59 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .signature-crosshair { stroke: rgba(255,255,255,.26); stroke-width: 1; }
 .signature-anchor { fill: var(--accent); stroke: #141414; stroke-width: 2; }
 .signature-measure { font-family: 'DM Mono', monospace; font-size: 13px; fill: var(--accent); letter-spacing: 1px; }
+
+.geometry-interactive { cursor: crosshair; touch-action: pan-y; }
+.geometry-construction { opacity: .92; }
+.geometry-circle {
+  fill: none;
+  stroke: rgba(239,238,232,.28);
+  stroke-width: 1;
+  stroke-dasharray: 1100;
+  stroke-dashoffset: 1100;
+}
+.geometry-circle--dashed { stroke: rgba(255,90,31,.46); stroke-dasharray: 4 6; }
+.geometry-construction-line { fill: none; }
+.geometry-dimension {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.15;
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+}
+.geometry-dimension--diagonal { stroke-width: 1.35; }
+.geometry-dimension-label {
+  fill: #ff875d;
+  font: 10px 'DM Mono', monospace;
+  letter-spacing: .7px;
+}
+.geometry-extension {
+  fill: none;
+  stroke: rgba(255,90,31,.58);
+  stroke-width: .9;
+  stroke-dasharray: 3 4;
+  opacity: 0;
+}
+.geometry-angle-arc {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.4;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+}
+.geometry-hover-layer { opacity: 0; transition: opacity .16s ease; }
+.geometry-interactive.is-tracking .geometry-hover-layer { opacity: 1; }
+.geometry-hover-line { stroke: rgba(255,90,31,.45); stroke-width: .8; stroke-dasharray: 4 6; }
+.geometry-probe { fill: #efeee8; stroke: var(--accent); stroke-width: 3; }
+.geometry-probe-label { fill: #ffb394; font: 11px 'DM Mono', monospace; letter-spacing: .6px; }
+.signature-anchor { transition: r .16s ease, filter .16s ease; }
+.signature-anchor.is-near { filter: drop-shadow(0 0 7px rgba(255,90,31,.95)); }
+.geometry-coordinate-readout {
+  max-width: 42%;
+  color: #ff895e;
+  font: .56rem 'DM Mono', monospace;
+  text-align: center;
+  letter-spacing: .035em;
+}
 .signature-annotations {
   opacity: 0;
   transform: translateY(12px);
@@ -177,6 +230,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   right: 1.2rem;
   bottom: 1rem;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 1rem;
   color: #8d8c85;
@@ -520,7 +574,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .signature-stage__heading h2 { font-size: clamp(2rem, 10vw, 3.2rem); }
   .signature-board { min-height: 290px; }
   .signature-svg { min-height: 280px; }
-  .signature-board__caption { left: .6rem; right: .6rem; bottom: .6rem; font-size: .47rem; }
+  .signature-board__caption { left: .6rem; right: .6rem; bottom: .6rem; gap: .4rem; flex-wrap: wrap; font-size: .47rem; }
+  .geometry-coordinate-readout { order: 3; max-width: 100%; width: 100%; text-align: left; font-size: .46rem; }
   .signature-footer { align-items: start; font-size: .47rem; }
   .work-story-stage { padding: 3.7rem 0; }
   .work-story-head h2 { font-size: clamp(2.3rem, 11vw, 3.5rem); }
