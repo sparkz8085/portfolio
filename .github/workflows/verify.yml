@@ -1,0 +1,32 @@
+name: Verify portfolio
+
+on:
+  push:
+    branches: [main, weather-world-redesign]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Build, lint, and dependency audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Lint source
+        run: npm run lint
+      - name: Build production bundle
+        run: npm run build
+      - name: Audit production and development dependencies
+        run: npm audit --audit-level=high
