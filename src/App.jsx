@@ -78,6 +78,12 @@ const steps = [
 function App() {
   const formRef = useRef(null)
   const signatureRef = useRef(null)
+  const geometrySvgRef = useRef(null)
+  const geometryVerticalRef = useRef(null)
+  const geometryHorizontalRef = useRef(null)
+  const geometryProbeRef = useRef(null)
+  const geometryProbeLabelRef = useRef(null)
+  const geometryReadoutRef = useRef(null)
   const workStoryRef = useRef(null)
   const [activeProject, setActiveProject] = useState(0)
   const [sending, setSending] = useState(false)
@@ -148,6 +154,64 @@ function App() {
       workContext.revert()
     }
   }, [])
+
+  const handleGeometryPointerMove = (event) => {
+    const svg = geometrySvgRef.current
+    const matrix = svg?.getScreenCTM()
+    if (!svg || !matrix) return
+
+    const pointer = svg.createSVGPoint()
+    pointer.x = event.clientX
+    pointer.y = event.clientY
+    const local = pointer.matrixTransform(matrix.inverse())
+    const x = Math.max(0, Math.min(1000, local.x))
+    const y = Math.max(0, Math.min(520, local.y))
+    const roundedX = Math.round(x)
+    const roundedY = Math.round(y)
+
+    geometryVerticalRef.current?.setAttribute('x1', String(x))
+    geometryVerticalRef.current?.setAttribute('x2', String(x))
+    geometryHorizontalRef.current?.setAttribute('y1', String(y))
+    geometryHorizontalRef.current?.setAttribute('y2', String(y))
+    geometryProbeRef.current?.setAttribute('cx', String(x))
+    geometryProbeRef.current?.setAttribute('cy', String(y))
+
+    const labelX = x > 800 ? x - 172 : x + 14
+    const labelY = y < 42 ? y + 25 : y - 12
+    geometryProbeLabelRef.current?.setAttribute('x', String(labelX))
+    geometryProbeLabelRef.current?.setAttribute('y', String(labelY))
+
+    let nearestNode = null
+    let nearestDistance = Infinity
+    svg.querySelectorAll('[data-geometry-node]').forEach((node) => {
+      const nodeX = Number(node.getAttribute('cx'))
+      const nodeY = Number(node.getAttribute('cy'))
+      const distance = Math.hypot(x - nodeX, y - nodeY)
+      node.classList.toggle('is-near', distance < 36)
+      if (distance < nearestDistance) {
+        nearestDistance = distance
+        nearestNode = node
+      }
+    })
+
+    const snapNode = nearestDistance < 36 ? nearestNode : null
+    const nodeName = snapNode?.getAttribute('data-geometry-node')
+    if (geometryReadoutRef.current) {
+      geometryReadoutRef.current.textContent = nodeName
+        ? nodeName + '  ·  X ' + roundedX + '  /  Y ' + roundedY
+        : 'CURSOR  ·  X ' + roundedX + '  /  Y ' + roundedY
+    }
+    svg.classList.add('is-tracking')
+  }
+
+  const handleGeometryPointerLeave = () => {
+    const svg = geometrySvgRef.current
+    svg?.classList.remove('is-tracking')
+    svg?.querySelectorAll('[data-geometry-node]').forEach((node) => node.classList.remove('is-near'))
+    if (geometryReadoutRef.current) {
+      geometryReadoutRef.current.textContent = 'MOVE POINTER TO INSPECT GEOMETRY'
+    }
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -278,8 +342,22 @@ function App() {
               <p>Scroll to assemble the KS mark: first the stem, then the diagonals, then the final form. Design should feel intentional before it feels finished.</p>
             </div>
             <div className="signature-board">
-              <svg className="signature-svg" viewBox="0 0 1000 520" role="img" aria-label="The KS monogram is constructed from geometric letterforms, guide lines, and measured diagonals.">
+              <svg
+                ref={geometrySvgRef}
+                className="signature-svg geometry-interactive"
+                viewBox="0 0 1000 520"
+                role="img"
+                aria-label="Interactive KS geometry board. Move the pointer to inspect coordinates and construction nodes."
+                onPointerMove={handleGeometryPointerMove}
+                onPointerLeave={handleGeometryPointerLeave}
+              >
                 <defs>
+                  <marker id="geometryArrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#ff5a1f" />
+                  </marker>
+                  <pattern id="geometryFineGrid" width="10" height="10" patternUnits="userSpaceOnUse">
+                    <path d="M10 0H0V10" fill="none" stroke="#ffffff" strokeOpacity=".045" strokeWidth=".5" />
+                  </pattern>
                   <clipPath id="letterKReveal" clipPathUnits="userSpaceOnUse">
                     <rect id="letterKMask" x="0" y="0" width="490" height="520" />
                   </clipPath>
@@ -287,25 +365,51 @@ function App() {
                     <rect id="letterSMask" x="0" y="0" width="850" height="520" />
                   </clipPath>
                 </defs>
-                <path className="signature-guide signature-diagonal" d="M120 470 L650 65" />
-                <path className="signature-guide signature-diagonal" d="M315 65 L830 470" />
-                <line className="signature-crosshair" x1="0" y1="260" x2="1000" y2="260" />
-                <line className="signature-crosshair" x1="500" y1="0" x2="500" y2="520" />
+                <rect width="1000" height="520" fill="url(#geometryFineGrid)" pointerEvents="none" />
+                <g className="geometry-construction" pointerEvents="none">
+                  <path className="signature-guide signature-diagonal" d="M155 430 L520 65" />
+                  <path className="signature-guide signature-diagonal" d="M300 65 L690 455" />
+                  <line className="signature-crosshair" x1="0" y1="260" x2="1000" y2="260" />
+                  <line className="signature-crosshair" x1="500" y1="0" x2="500" y2="520" />
+                  <path className="geometry-construction-line geometry-circle" d="M 253 260 m -128 0 a 128 128 0 1 0 256 0 a 128 128 0 1 0 -256 0" />
+                  <circle className="geometry-circle" cx="505" cy="260" r="172" />
+                  <path className="geometry-circle geometry-circle--dashed" d="M 253 260 L 505 260 L 505 8" />
+                  <path className="geometry-angle-arc" d="M 430 260 A 75 75 0 0 0 451 207" />
+                  <text className="signature-measure" x="440" y="225">45°</text>
+                  <line className="geometry-extension" x1="202" y1="105" x2="220" y2="105" />
+                  <line className="geometry-extension" x1="202" y1="365" x2="220" y2="365" />
+                  <line className="geometry-dimension" x1="202" y1="105" x2="202" y2="365" markerStart="url(#geometryArrow)" markerEnd="url(#geometryArrow)" />
+                  <text className="geometry-dimension-label" x="187" y="236" transform="rotate(-90 187 236)">3.7 U / STEM</text>
+                  <line className="geometry-extension" x1="220" y1="390" x2="220" y2="410" />
+                  <line className="geometry-extension" x1="272" y1="390" x2="272" y2="410" />
+                  <line className="geometry-dimension" x1="220" y1="400" x2="272" y2="400" markerStart="url(#geometryArrow)" markerEnd="url(#geometryArrow)" />
+                  <text className="geometry-dimension-label" x="223" y="423">0.75 U</text>
+                  <line className="geometry-dimension geometry-dimension--diagonal" x1="344" y1="181" x2="425" y2="100" markerStart="url(#geometryArrow)" markerEnd="url(#geometryArrow)" />
+                  <text className="geometry-dimension-label" x="369" y="126" transform="rotate(-45 369 126)">45° / DIAGONAL</text>
+                  <path className="geometry-extension" d="M 155 430 L 155 450 M 520 65 L 540 65" />
+                  <text className="geometry-dimension-label" x="160" y="472">X = Y / 1:1 RATIO</text>
+                </g>
+                <g className="geometry-hover-layer" pointerEvents="none">
+                  <line ref={geometryVerticalRef} className="geometry-hover-line" x1="500" x2="500" y1="0" y2="520" />
+                  <line ref={geometryHorizontalRef} className="geometry-hover-line" x1="0" x2="1000" y1="260" y2="260" />
+                  <circle ref={geometryProbeRef} className="geometry-probe" cx="500" cy="260" r="6" />
+                  <text ref={geometryProbeLabelRef} className="geometry-probe-label" x="514" y="248">CURSOR</text>
+                </g>
                 <line className="signature-guide--stem" x1="253" y1="90" x2="253" y2="420" />
                 <text className="signature-letter signature-letter--outline" x="220" y="365">K</text>
                 <text className="signature-letter signature-letter--outline" x="470" y="365">S</text>
                 <text className="signature-letter signature-letter--solid" clipPath="url(#letterKReveal)" x="220" y="365">K</text>
                 <text className="signature-letter signature-letter--solid" clipPath="url(#letterSReveal)" x="470" y="365">S</text>
-                <circle className="signature-anchor" cx="253" cy="260" r="5" />
-                <circle className="signature-anchor" cx="650" cy="65" r="5" />
-                <circle className="signature-anchor" cx="830" cy="470" r="5" />
+                <circle className="signature-anchor" data-geometry-node="STEM NODE" cx="253" cy="260" r="5" />
+                <circle className="signature-anchor" data-geometry-node="UPPER DIAGONAL NODE" cx="650" cy="65" r="5" />
+                <circle className="signature-anchor" data-geometry-node="BASELINE NODE" cx="830" cy="470" r="5" />
                 <g className="signature-annotations">
-                  <text className="signature-measure" x="274" y="103">STEM = 1U</text>
+                  <text className="signature-measure" x="274" y="103">STEM / 3.7U</text>
                   <text className="signature-measure" x="673" y="91">45° / CONSTRUCTION</text>
                   <text className="signature-measure" x="670" y="446">KS / IDENTITY SYSTEM</text>
                 </g>
               </svg>
-              <div className="signature-board__caption"><span>FORM STUDY <strong>— 001</strong></span><span>GEOMETRY · LETTER · IDENTITY</span></div>
+              <div className="signature-board__caption"><span>FORM STUDY <strong>— 001</strong></span><span ref={geometryReadoutRef} className="geometry-coordinate-readout" aria-live="polite">MOVE POINTER TO INSPECT GEOMETRY</span><span>GEOMETRY · LETTER · IDENTITY</span></div>
             </div>
             <div className="signature-footer"><span><i /> SCROLL-DRIVEN CONSTRUCTION</span><span>FROM SHAPE TO SIGNATURE ↓</span></div>
           </div>
