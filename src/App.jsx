@@ -77,6 +77,14 @@ const steps = [
 
 function App() {
   const formRef = useRef(null)
+  const terrainSvgRef = useRef(null)
+  const terrainRidgeRef = useRef(null)
+  const terrainContoursRef = useRef(null)
+  const terrainPointerVerticalRef = useRef(null)
+  const terrainPointerHorizontalRef = useRef(null)
+  const terrainPointerDotRef = useRef(null)
+  const terrainPointerLabelRef = useRef(null)
+  const terrainReadoutRef = useRef(null)
   const signatureRef = useRef(null)
   const geometrySvgRef = useRef(null)
   const geometryVerticalRef = useRef(null)
@@ -158,6 +166,81 @@ function App() {
       workContext.revert()
     }
   }, [])
+
+  const handleTerrainPointerMove = (event) => {
+    const svg = terrainSvgRef.current
+    const matrix = svg?.getScreenCTM()
+    if (!svg || !matrix) return
+
+    const pointer = svg.createSVGPoint()
+    pointer.x = event.clientX
+    pointer.y = event.clientY
+    const local = pointer.matrixTransform(matrix.inverse())
+    const x = Math.max(0, Math.min(560, local.x))
+    const y = Math.max(0, Math.min(490, local.y))
+    const normalX = x / 560 - 0.5
+    const normalY = y / 490 - 0.5
+    const roundedX = Math.round(x).toString().padStart(3, '0')
+    const roundedY = Math.round(y).toString().padStart(3, '0')
+
+    terrainPointerVerticalRef.current?.setAttribute('x1', String(x))
+    terrainPointerVerticalRef.current?.setAttribute('x2', String(x))
+    terrainPointerHorizontalRef.current?.setAttribute('y1', String(y))
+    terrainPointerHorizontalRef.current?.setAttribute('y2', String(y))
+    terrainPointerDotRef.current?.setAttribute('cx', String(x))
+    terrainPointerDotRef.current?.setAttribute('cy', String(y))
+
+    const labelX = x > 420 ? x - 114 : x + 12
+    const labelY = y < 35 ? y + 20 : y - 10
+    terrainPointerLabelRef.current?.setAttribute('x', String(labelX))
+    terrainPointerLabelRef.current?.setAttribute('y', String(labelY))
+
+    if (terrainRidgeRef.current) {
+      terrainRidgeRef.current.setAttribute(
+        'transform',
+        'translate(' + (-normalX * 7).toFixed(2) + ' ' + (-normalY * 5).toFixed(2) + ')',
+      )
+    }
+    if (terrainContoursRef.current) {
+      terrainContoursRef.current.setAttribute(
+        'transform',
+        'translate(' + (normalX * 3.5).toFixed(2) + ' ' + (normalY * 2.5).toFixed(2) + ')',
+      )
+    }
+
+    let nearestName = 'TERRAIN SURVEY'
+    let nearestDistance = Infinity
+    svg.querySelectorAll('[data-terrain-node]').forEach((node) => {
+      const nodeX = Number(node.getAttribute('cx'))
+      const nodeY = Number(node.getAttribute('cy'))
+      const distance = Math.hypot(x - nodeX, y - nodeY)
+      node.classList.toggle('is-near', distance < 34)
+      if (distance < nearestDistance) {
+        nearestDistance = distance
+        nearestName = node.getAttribute('data-terrain-node') || nearestName
+      }
+    })
+
+    svg.classList.add('is-interacting')
+    svg.closest('.terrain-card')?.classList.add('is-interacting')
+    if (terrainReadoutRef.current) {
+      terrainReadoutRef.current.textContent =
+        (nearestDistance < 34 ? nearestName + '  /  ' : 'CURSOR  /  ') +
+        'X ' + roundedX + '  ·  Y ' + roundedY
+    }
+  }
+
+  const handleTerrainPointerLeave = () => {
+    const svg = terrainSvgRef.current
+    svg?.classList.remove('is-interacting')
+    svg?.closest('.terrain-card')?.classList.remove('is-interacting')
+    svg?.querySelectorAll('[data-terrain-node]').forEach((node) => node.classList.remove('is-near'))
+    terrainRidgeRef.current?.removeAttribute('transform')
+    terrainContoursRef.current?.removeAttribute('transform')
+    if (terrainReadoutRef.current) {
+      terrainReadoutRef.current.textContent = 'HOVER GRAPH TO INSPECT'
+    }
+  }
 
   const handleGeometryPointerMove = (event) => {
     const svg = geometrySvgRef.current
@@ -275,17 +358,26 @@ function App() {
           <div className="hero-grid">
             <div className="hero-copy">
               <p className="eyebrow"><span className="eyebrow-index">01 / INTRO</span> Ideas into working things.</p>
-              <h1 id="hero-title">I make the<br /><em>hard parts</em><br />make sense<span className="heading-period">.</span></h1>
-              <p className="hero-lede">Web development, AI experiments, and thoughtful design — built one useful detail at a time.</p>
+              <h1 id="hero-title">I build things<br /><em>that work</em><br />beautifully<span className="heading-period">.</span></h1>
+              <p className="hero-lede">From web apps and AI-powered workflows to thoughtful visual systems, I turn practical problems into digital experiences people can actually use.</p>
               <div className="hero-actions">
                 <a className="button-primary" href="#work">Explore selected work <span aria-hidden="true">↓</span></a>
                 <a className="text-link" href="#about">A little about me <span aria-hidden="true">↗</span></a>
               </div>
             </div>
-            <div className="terrain-card" aria-label="Abstract technical wireframe illustration">
+            <div className="terrain-card" aria-label="Interactive topographic wireframe illustration">
               <div className="terrain-card__top"><span>FIG. 01 — THINK / MAKE / REFINE</span><span className="live-mark">● LIVE STUDY</span></div>
-              <svg className="terrain-svg" viewBox="0 0 560 490" role="img" aria-labelledby="terrain-title">
-                <title id="terrain-title">A wireframe terrain rising from a technical grid</title>
+              <svg
+                ref={terrainSvgRef}
+                className="terrain-svg"
+                viewBox="0 0 560 490"
+                role="img"
+                aria-labelledby="terrain-title"
+                aria-description="Move your pointer over the terrain to inspect coordinates, highlight ridge nodes, and shift the contour lines."
+                onPointerMove={handleTerrainPointerMove}
+                onPointerLeave={handleTerrainPointerLeave}
+              >
+                <title id="terrain-title">Interactive topographic wireframe — hover to inspect coordinates and ridge nodes</title>
                 <defs>
                   <pattern id="terrainGrid" width="24" height="24" patternUnits="userSpaceOnUse">
                     <path d="M 24 0 L 0 0 0 24" fill="none" stroke="currentColor" strokeOpacity=".16" strokeWidth=".7" />
@@ -296,7 +388,7 @@ function App() {
                   </linearGradient>
                 </defs>
                 <rect width="560" height="490" fill="url(#terrainGrid)" />
-                <g className="terrain-contours" fill="none" stroke="currentColor" strokeWidth="1.2">
+                <g ref={terrainContoursRef} className="terrain-contours" fill="none" stroke="currentColor" strokeWidth="1.2">
                   <path d="M-10 337 C76 322 92 277 160 283 S244 335 305 283 395 194 470 224 536 209 570 183" />
                   <path d="M-10 359 C76 344 102 300 165 305 S245 357 311 306 399 218 474 246 540 231 570 206" />
                   <path d="M-10 382 C83 365 112 323 171 328 S250 380 318 330 406 241 480 269 545 255 570 229" />
@@ -305,19 +397,27 @@ function App() {
                   <path d="M-10 454 C100 436 137 394 192 398 S270 452 341 402 427 312 498 340 554 326 570 304" />
                 </g>
                 <path className="terrain-mountain" d="M-10 336 C76 322 92 277 160 283 S244 335 305 283 395 194 470 224 536 209 570 183 L570 490 L-10 490 Z" fill="url(#terrainFill)" />
-                <g className="terrain-ridge" fill="none" stroke="#77955b" strokeWidth="1.4">
+                <g ref={terrainRidgeRef} className="terrain-ridge" fill="none" stroke="#77955b" strokeWidth="1.4">
                   <path d="M160 283 L199 242 222 258 270 185 294 213 334 156 361 190 394 145 422 180 470 224" />
                   <path d="M199 242 L210 283 M270 185 L279 250 M334 156 L341 224 M394 145 L401 209" strokeDasharray="3 5" />
                 </g>
                 <g className="terrain-points" fill="#77955b">
-                  <circle cx="270" cy="185" r="4" /><circle cx="334" cy="156" r="4" /><circle cx="394" cy="145" r="4" />
+                  <circle data-terrain-node="RIDGE 01" cx="270" cy="185" r="4" />
+                  <circle data-terrain-node="RIDGE 02" cx="334" cy="156" r="4" />
+                  <circle data-terrain-node="RIDGE 03" cx="394" cy="145" r="4" />
                 </g>
                 <g className="terrain-labels" fill="currentColor" fontSize="10" letterSpacing="1.4">
                   <text x="22" y="34">IDEA / 001</text><text x="398" y="52">BUILD SYSTEMS</text><text x="22" y="466">ROUGH TERRAIN → CLEAR PATH</text>
                 </g>
                 <path className="terrain-crosshair" d="M438 118 h20 M448 108 v20" stroke="currentColor" strokeWidth="1" />
+                <g className="terrain-pointer-layer" pointerEvents="none">
+                  <line ref={terrainPointerVerticalRef} className="terrain-pointer-line" x1="280" x2="280" y1="0" y2="490" />
+                  <line ref={terrainPointerHorizontalRef} className="terrain-pointer-line" x1="0" x2="560" y1="245" y2="245" />
+                  <circle ref={terrainPointerDotRef} className="terrain-pointer-dot" cx="280" cy="245" r="5" />
+                  <text ref={terrainPointerLabelRef} className="terrain-pointer-label" x="292" y="235">X 280 · Y 245</text>
+                </g>
               </svg>
-              <div className="terrain-card__bottom"><span>BUILD WITH INTENT</span><span>22°34′ N · KOLKATA, IN</span></div>
+              <div className="terrain-card__bottom"><span>BUILD WITH INTENT</span><span ref={terrainReadoutRef} className="terrain-readout" aria-live="polite">HOVER GRAPH TO INSPECT</span></div>
             </div>
           </div>
           <div className="hero-bottomline"><span>Mapping ideas to implementation.</span><span>Scroll to explore <span className="scroll-arrow">↓</span></span></div>
