@@ -197,7 +197,23 @@ h1 em, h2 em { font-style: normal; color: var(--accent-dark); }
   .work-item__visual { min-height: 215px; }
 }
 @media (max-width: 720px) {
-  .site-frame { width: calc(100% - 28px); }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  body { min-width: 320px; overflow-x: clip; }
+  .site-frame { width: calc(100% - 28px); max-width: 100%; }
+  .hero-grid, .manifesto-content, .section-heading, .about-layout, .contact-section,
+  .work-item, .capability, .process-grid, .about-facts, .contact-form {
+    min-width: 0;
+  }
+  .hero-copy, .hero-actions, .terrain-card, .terrain-card__top, .terrain-card__bottom {
+    min-width: 0;
+  }
+  .terrain-card__top span, .terrain-card__bottom span { overflow-wrap: anywhere; }
+  .terrain-svg { display: block; width: 100%; min-width: 0; touch-action: pan-y; }
+  .terrain-pointer-layer { pointer-events: none; }
+  .terrain-card { -webkit-tap-highlight-color: transparent; }
+  .work-item__visual, .about-portrait, .signature-board, .project-wall { max-width: 100%; }
+  img, svg, video, canvas { max-width: 100%; }
+
   .site-header { min-height: 72px; position: relative; }
   .site-nav { display: none; position: absolute; top: calc(100% + 1px); left: -14px; right: -14px; z-index: 20; padding: 1rem 1.1rem 1.3rem; flex-direction: column; align-items: stretch; gap: 0; background: var(--paper); border-bottom: 1px solid var(--line); }
   .site-nav--open { display: flex; }
@@ -244,6 +260,15 @@ h1 em, h2 em { font-style: normal; color: var(--accent-dark); }
 }
 @media (max-width: 390px) {
   .site-frame { width: calc(100% - 22px); }
+  .hero-copy { padding-top: 2.3rem; }
+  .hero h1 { font-size: clamp(3rem, 15vw, 3.65rem); overflow-wrap: anywhere; }
+  .hero-lede { font-size: .94rem; }
+  .hero-actions { align-items: stretch; flex-direction: column; width: 100%; }
+  .hero-actions a { width: fit-content; max-width: 100%; }
+  .terrain-card__top, .terrain-card__bottom { gap: .45rem; }
+  .terrain-card__top { align-items: flex-start; }
+  .terrain-readout { font-size: .46rem; }
+
   .hero-topline { flex-direction: column; }
   .availability { max-width: none; justify-content: flex-start; text-align: left; }
   .hero h1 { font-size: 3.65rem; }
