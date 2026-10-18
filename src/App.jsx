@@ -1,6 +1,9 @@
 import './App.css'
+import './ScrollExperience.css'
 import emailjs from '@emailjs/browser'
 import { useEffect, useRef, useState } from 'react'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import profilePic from './assets/profile.jpg'
 
 const EMAILJS_CONFIG = {
@@ -74,6 +77,9 @@ const steps = [
 
 function App() {
   const formRef = useRef(null)
+  const signatureRef = useRef(null)
+  const workStoryRef = useRef(null)
+  const [activeProject, setActiveProject] = useState(0)
   const [sending, setSending] = useState(false)
   const [messageState, setMessageState] = useState('')
   const [menuOpen, setMenuOpen] = useState(false)
@@ -92,6 +98,55 @@ function App() {
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
+  useEffect(() => {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const narrowScreen = window.matchMedia('(max-width: 900px)').matches
+    if (reduceMotion || narrowScreen) return undefined
+
+    gsap.registerPlugin(ScrollTrigger)
+
+    const signatureContext = gsap.context(() => {
+      const timeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: signatureRef.current,
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 0.7,
+        },
+      })
+
+      timeline
+        .set('#letterKMask', { attr: { width: 0 } }, 0)
+        .set('#letterSMask', { attr: { width: 0 } }, 0)
+        .to('#letterKMask', { attr: { width: 490 }, duration: 0.9, ease: 'none' }, 0.05)
+        .to('.signature-guide--stem', { scaleY: 1, duration: 0.45, ease: 'none' }, 0.2)
+        .to('.signature-diagonal', { strokeDashoffset: 0, duration: 0.8, ease: 'none' }, 0.23)
+        .to('#letterSMask', { attr: { width: 850 }, duration: 0.85, ease: 'none' }, 0.72)
+        .to('.signature-annotations', { opacity: 1, y: 0, duration: 0.3, ease: 'none' }, 1.24)
+    }, signatureRef)
+
+    const workContext = gsap.context(() => {
+      let lastStep = -1
+      ScrollTrigger.create({
+        trigger: workStoryRef.current,
+        start: 'top top',
+        end: 'bottom bottom',
+        onUpdate: (trigger) => {
+          const nextStep = Math.min(projects.length, Math.floor(trigger.progress * (projects.length + 1)))
+          if (nextStep !== lastStep) {
+            lastStep = nextStep
+            setActiveProject(nextStep)
+          }
+        },
+      })
+    }, workStoryRef)
+
+    return () => {
+      signatureContext.revert()
+      workContext.revert()
+    }
   }, [])
 
   const handleSubmit = async (event) => {
@@ -116,6 +171,7 @@ function App() {
   }
 
   const closeMenu = () => setMenuOpen(false)
+  const activeCase = activeProject < projects.length ? projects[activeProject] : null
 
   return (
     <div className="site-frame" id="top">
@@ -212,35 +268,143 @@ function App() {
           <div className="manifesto-footer"><span>CLARITY OVER COMPLEXITY</span><span>PROCESS / 01—03</span></div>
         </section>
 
-        <section className="work-section section-rule" id="work" aria-labelledby="work-title">
-          <div className="section-heading">
-            <div><div className="section-label"><span>03</span> / SELECTED WORK</div><h2 id="work-title">Things I’ve been<br /><em>working on.</em></h2></div>
-            <p>A mix of practical builds, learning projects, and experiments. Each one is a chance to make a system a little clearer.</p>
+        <section ref={signatureRef} className="signature-section" aria-labelledby="signature-title">
+          <div className="signature-stage">
+            <div className="signature-stage__heading">
+              <div>
+                <div className="section-label"><span>03</span> / SIGNATURE STUDY</div>
+                <h2 id="signature-title">A name becomes<br /><em>a system.</em></h2>
+              </div>
+              <p>Scroll to assemble the KS mark: first the stem, then the diagonals, then the final form. Design should feel intentional before it feels finished.</p>
+            </div>
+            <div className="signature-board">
+              <svg className="signature-svg" viewBox="0 0 1000 520" role="img" aria-label="The KS monogram is constructed from geometric letterforms, guide lines, and measured diagonals.">
+                <defs>
+                  <clipPath id="letterKReveal" clipPathUnits="userSpaceOnUse">
+                    <rect id="letterKMask" x="0" y="0" width="490" height="520" />
+                  </clipPath>
+                  <clipPath id="letterSReveal" clipPathUnits="userSpaceOnUse">
+                    <rect id="letterSMask" x="0" y="0" width="850" height="520" />
+                  </clipPath>
+                </defs>
+                <path className="signature-guide signature-diagonal" d="M120 470 L650 65" />
+                <path className="signature-guide signature-diagonal" d="M315 65 L830 470" />
+                <line className="signature-crosshair" x1="0" y1="260" x2="1000" y2="260" />
+                <line className="signature-crosshair" x1="500" y1="0" x2="500" y2="520" />
+                <line className="signature-guide--stem" x1="253" y1="90" x2="253" y2="420" />
+                <text className="signature-letter signature-letter--outline" x="220" y="365">K</text>
+                <text className="signature-letter signature-letter--outline" x="470" y="365">S</text>
+                <text className="signature-letter signature-letter--solid" clipPath="url(#letterKReveal)" x="220" y="365">K</text>
+                <text className="signature-letter signature-letter--solid" clipPath="url(#letterSReveal)" x="470" y="365">S</text>
+                <circle className="signature-anchor" cx="253" cy="260" r="5" />
+                <circle className="signature-anchor" cx="650" cy="65" r="5" />
+                <circle className="signature-anchor" cx="830" cy="470" r="5" />
+                <g className="signature-annotations">
+                  <text className="signature-measure" x="274" y="103">STEM = 1U</text>
+                  <text className="signature-measure" x="673" y="91">45° / CONSTRUCTION</text>
+                  <text className="signature-measure" x="670" y="446">KS / IDENTITY SYSTEM</text>
+                </g>
+              </svg>
+              <div className="signature-board__caption"><span>FORM STUDY <strong>— 001</strong></span><span>GEOMETRY · LETTER · IDENTITY</span></div>
+            </div>
+            <div className="signature-footer"><span><i /> SCROLL-DRIVEN CONSTRUCTION</span><span>FROM SHAPE TO SIGNATURE ↓</span></div>
           </div>
-          <div className="work-list">
-            {projects.map((project) => (
-              <article className={`work-item ${project.featured ? 'work-item--featured' : ''}`} key={project.number}>
-                <div className="work-item__number">{project.number}<span> / 05</span></div>
-                <div className="work-item__visual" aria-hidden="true">
-                  <div className="project-symbol">{project.symbol}</div>
-                  <span className="visual-index">CASE STUDY / {project.number}</span>
-                  <div className="visual-lines"><i /><i /><i /><i /></div>
-                </div>
-                <div className="work-item__details">
-                  <div className="work-item__meta"><span>{project.kind}</span><span>2025—26</span></div>
-                  <h3>{project.title}</h3>
-                  <p>{project.description}</p>
-                  <ul className="tag-list">{project.stack.map((item) => <li key={item}>{item}</li>)}</ul>
-                  {project.link ? <a className="case-link" href={project.link} target="_blank" rel="noreferrer">Explore project <span aria-hidden="true">↗</span></a> : <span className="work-note">Selected work / ongoing</span>}
-                </div>
-              </article>
-            ))}
+        </section>
+
+        <section ref={workStoryRef} className="work-story-section" id="work" aria-labelledby="work-title">
+          <div className="work-story-stage">
+            <div className="work-story-head">
+              <div>
+                <div className="section-label"><span>04</span> / SELECTED WORK</div>
+                <h2 id="work-title">Things I’ve been<br /><em>building.</em></h2>
+              </div>
+              <p className="work-story-head__note">Every project, in one view. Keep scrolling to inspect each build, its role, the tools behind it, and the problem it explores.</p>
+            </div>
+
+            <div className="work-story-layout">
+              <aside className="project-details-panel" aria-live="polite" aria-atomic="true">
+                {activeCase ? (
+                  <div className="project-details-enter" key={activeProject}>
+                    <div className="project-details-panel__index">{activeCase.number} / 05 — CASE STUDY</div>
+                    <div className="project-details-panel__kind">{activeCase.kind}</div>
+                    <h3>{activeCase.title}</h3>
+                    <p>{activeCase.description}</p>
+                    <ul className="tag-list">{activeCase.stack.map((item) => <li key={item}>{item}</li>)}</ul>
+                    {activeCase.link ? (
+                      <a className="case-link" href={activeCase.link} target="_blank" rel="noreferrer">Explore project <span aria-hidden="true">↗</span></a>
+                    ) : (
+                      <span className="work-note">Selected work / learning in progress</span>
+                    )}
+                  </div>
+                ) : (
+                  <div className="project-details-enter project-profile-detail" key="profile">
+                    <div className="project-details-panel__index">06 / THE BUILDER</div>
+                    <div className="profile-detail__portrait"><img src={profilePic} alt="Kunal Sarkar" /></div>
+                    <div className="project-details-panel__kind">BCA STUDENT · WEB / AI / DESIGN</div>
+                    <h3>Kunal<br /><em>Sarkar.</em></h3>
+                    <p>I’m a Kolkata-based student and builder who likes turning complicated ideas into clear, useful digital experiences.</p>
+                    <div className="profile-detail__facts"><span>KOLKATA, INDIA</span><span>LEARN · BUILD · REFINE</span></div>
+                    <a className="case-link" href="#about">Meet me properly <span aria-hidden="true">↗</span></a>
+                  </div>
+                )}
+              </aside>
+
+              <div className="project-wall" aria-label="All selected projects and profile">
+                {projects.map((project, index) => (
+                  <button
+                    className={'project-tile ' + (activeProject === index ? 'project-tile--active' : '')}
+                    type="button"
+                    key={project.number}
+                    aria-pressed={activeProject === index}
+                    onClick={() => setActiveProject(index)}
+                  >
+                    <span className="project-tile__index"><span>CASE / {project.number}</span><b>{activeProject === index ? 'ACTIVE' : 'OPEN'}</b></span>
+                    <span className={'project-art project-art--' + (index + 1)} aria-hidden="true">
+                      <span className="project-art__label">{['SOURCE / 001', 'SEGMENTS / 002', 'WORKFLOW / 003', 'COMPOSITION / 004', 'INTERFACE / 005'][index]}</span>
+                      {index === 0 && <span className="art-terminal"><span>$ php runner</span><br /><span>01&nbsp; compile()</span><br /><span>02&nbsp; execute()</span><i /></span>}
+                      {index === 1 && <span className="art-node-map"><i /><i /><i /><i /></span>}
+                      {index === 2 && <span className="art-dashboard"><i /><i /><i /><i /></span>}
+                      {index === 3 && <span className="art-poster"><span>VISUAL STUDY / 24</span><b>IDEA<br />→ FORM</b><span>LAYOUT / SYSTEM</span></span>}
+                      {index === 4 && <span className="art-browser"><span className="art-browser__bar"><i /><i /><i /></span><span className="art-browser__body"><i /><i /><i /><i /></span></span>}
+                    </span>
+                    <span className="project-tile__title"><strong>{project.title}</strong><span>{project.number} ↗</span></span>
+                    <span className="project-tile__kind">{project.kind}</span>
+                  </button>
+                ))}
+                <button
+                  className={'project-tile profile-tile ' + (activeProject === projects.length ? 'project-tile--active' : '')}
+                  type="button"
+                  aria-pressed={activeProject === projects.length}
+                  onClick={() => setActiveProject(projects.length)}
+                >
+                  <span className="project-tile__index"><span>PROFILE / 006</span><b>{activeProject === projects.length ? 'ACTIVE' : 'ABOUT'}</b></span>
+                  <span className="profile-tile__art" aria-hidden="true"><img src={profilePic} alt="" /></span>
+                  <span className="project-tile__title"><strong>Kunal Sarkar</strong><span>06 ↗</span></span>
+                  <span className="project-tile__kind">The person behind the projects</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="work-story-footer">
+              <span className="story-footer__status"><i /> SCROLL TO INSPECT</span>
+              <div
+                className="story-progress"
+                role="progressbar"
+                aria-label="Portfolio story progress"
+                aria-valuemin={1}
+                aria-valuemax={projects.length + 1}
+                aria-valuenow={activeProject + 1}
+              >
+                <span style={{ width: String(((activeProject + 1) / (projects.length + 1)) * 100) + '%' }} />
+              </div>
+              <span className="story-footer__count">{String(activeProject + 1).padStart(2, '0')} / 06</span>
+            </div>
           </div>
         </section>
 
         <section className="services-section section-rule" id="services" aria-labelledby="services-title">
           <div className="section-heading">
-            <div><div className="section-label"><span>04</span> / WHAT I EXPLORE</div><h2 id="services-title">A few ways<br /><em>I can help.</em></h2></div>
+            <div><div className="section-label"><span>05</span> / WHAT I EXPLORE</div><h2 id="services-title">A few ways<br /><em>I can help.</em></h2></div>
             <p>Curious by default. Focused on making useful things, learning the craft, and collaborating well.</p>
           </div>
           <div className="capability-list">
@@ -254,7 +418,7 @@ function App() {
         </section>
 
         <section className="about-section section-rule" id="about" aria-labelledby="about-title">
-          <div className="section-label"><span>05</span> / A LITTLE ABOUT ME</div>
+          <div className="section-label"><span>06</span> / A LITTLE ABOUT ME</div>
           <div className="about-layout">
             <div className="about-portrait"><img src={profilePic} alt="Portrait of Kunal Sarkar" /><span>THE HUMAN BEHIND THE SCREEN</span></div>
             <div className="about-copy"><h2 id="about-title">Student now.<br /><em>Builder always.</em></h2><p>I’m Kunal, a BCA student at B.P. Poddar Institute of Management and Technology in Kolkata. I enjoy web development, machine learning, AI, and visual design — especially where they meet in a useful project.</p><p>I learn best by making things, breaking down problems, and refining the result. I’m still exploring, and that’s part of the point.</p><div className="about-facts"><div><span>BASED IN</span><strong>Kolkata, India</strong></div><div><span>STUDYING</span><strong>BCA · 2024—2028</strong></div><div><span>ALSO INTO</span><strong>Linux · Design · AI</strong></div></div><a className="text-link" href="https://github.com/sparkz8085" target="_blank" rel="noreferrer">More on GitHub <span aria-hidden="true">↗</span></a></div>
@@ -262,12 +426,12 @@ function App() {
         </section>
 
         <section className="process-section section-rule" aria-labelledby="process-title">
-          <div className="section-heading"><div><div className="section-label"><span>06</span> / HOW I WORK</div><h2 id="process-title">Small steps.<br /><em>Good outcomes.</em></h2></div><p>Not every project needs a grand plan. It does need a clear problem, a feedback loop, and care for the details.</p></div>
+          <div className="section-heading"><div><div className="section-label"><span>07</span> / HOW I WORK</div><h2 id="process-title">Small steps.<br /><em>Good outcomes.</em></h2></div><p>Not every project needs a grand plan. It does need a clear problem, a feedback loop, and care for the details.</p></div>
           <div className="process-grid">{steps.map(([number, title, description]) => <article className="process-step" key={number}><span>{number}</span><h3>{title}</h3><p>{description}</p></article>)}</div>
         </section>
 
         <section className="contact-section section-rule" id="contact" aria-labelledby="contact-title">
-          <div className="contact-intro"><div className="section-label"><span>07</span> / NEXT UP</div><h2 id="contact-title">What are you<br /><em>building?</em></h2><p>Have a project idea, want to collaborate, or just want to talk tech? Send a note.</p><a className="contact-email" href="mailto:kunalsarkar61570@gmail.com">kunalsarkar61570@gmail.com <span aria-hidden="true">↗</span></a></div>
+          <div className="contact-intro"><div className="section-label"><span>08</span> / NEXT UP</div><h2 id="contact-title">What are you<br /><em>building?</em></h2><p>Have a project idea, want to collaborate, or just want to talk tech? Send a note.</p><a className="contact-email" href="mailto:kunalsarkar61570@gmail.com">kunalsarkar61570@gmail.com <span aria-hidden="true">↗</span></a></div>
           <form className="contact-form" ref={formRef} onSubmit={handleSubmit}>
             <label htmlFor="user_name">Your name</label><input id="user_name" type="text" name="user_name" placeholder="What should I call you?" required />
             <label htmlFor="user_email">Email address</label><input id="user_email" type="email" name="user_email" placeholder="you@example.com" required />
