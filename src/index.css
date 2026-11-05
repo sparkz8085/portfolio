@@ -1,16 +1,1 @@
-:root {
-  color-scheme: light;
-  font-family: 'DM Sans', sans-serif;
-  color: #20241e;
-  background: #f4f3ed;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-* { box-sizing: border-box; }
-html { min-width: 320px; background: #f4f3ed; }
-body { margin: 0; min-width: 320px; min-height: 100vh; }
-button, input, textarea { font: inherit; }
-img, svg { max-width: 100%; }
+:root{color-scheme:dark;font-family:'Manrope',sans-serif;color:#f2f1ed;background:#11120f;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}*{box-sizing:border-box}html{min-width:320px;background:#11120f}body{margin:0;min-width:320px;min-height:100vh}button,input,textarea{font:inherit}img,svg{max-width:100%}
