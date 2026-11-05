@@ -111,6 +111,17 @@ function App() {
 
   return (
     <div className="site-shell">
+      <a className="floating-stamp" href="#home" aria-label="Kunal Sarkar — back to top">
+        <span className="stamp-center">KS<span>.</span></span>
+        <svg className="stamp-orbit" viewBox="0 0 160 160" aria-hidden="true">
+          <defs>
+            <path id="stamp-orbit-path" d="M 80,80 m -57,0 a 57,57 0 1,1 114,0 a 57,57 0 1,1 -114,0" />
+          </defs>
+          <text>
+            <textPath href="#stamp-orbit-path">DESIGN · CODE · &amp; CURIOSITY · DESIGN · CODE · &amp; CURIOSITY · </textPath>
+          </text>
+        </svg>
+      </a>
       <header className="topbar">
         <a className="brand" href="#home" onClick={closeMenu} aria-label="Kunal Sarkar home">KS<span>.</span></a>
         <button className="menu-toggle" type="button" aria-expanded={menuOpen} aria-label="Toggle navigation" onClick={() => setMenuOpen(!menuOpen)}>
@@ -130,7 +141,6 @@ function App() {
           <div className="hero-kicker"><span className="status-dot"></span> BCA STUDENT · DEVELOPER IN PROGRESS <span className="kicker-year">KOLKATA, IN</span></div>
           <div className="hero-title-wrap">
             <h1>Building digital<br /><span>things that</span> <em>matter.</em></h1>
-            <div className="hero-stamp" aria-label="Kunal Sarkar monogram"><span>KS</span><small>DESIGN · CODE<br />& CURIOSITY</small></div>
           </div>
           <div className="hero-bottom">
             <p>I’m Kunal — a BCA student exploring software development, AI, and thoughtful digital experiences. I like turning curious ideas into practical projects.</p>
