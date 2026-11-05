@@ -170,7 +170,7 @@ function App() {
           <div className="contact-top"><span className="eyebrow">04 — HAVE A PROJECT OR AN IDEA?</span><span className="contact-index">LET'S MAKE IT HAPPEN</span></div>
           <h2>Have a good<br /><em>one in mind?</em></h2>
           <div className="contact-grid">
-            <div><p>I’m open to learning opportunities, collaborations, internships, and conversations around technology.</p><a className="contact-email" href="mailto:kunalsarkar61570@gmail.com">kunalsarkar61570@gmail.com <Arrow diagonal /></a><div className="social-links"><a href="https://github.com/sparkz8085" target="_blank" rel="noreferrer">GITHUB <Arrow diagonal /></a><a href="https://www.linkedin.com/in/kunal-sarkar-00a0b8449/" target="_blank" rel="noreferrer">LINKEDIN <Arrow diagonal /></a></div></div>
+            <div><p>I’m open to learning opportunities, collaborations, internships, and conversations around technology.</p><a className="contact-email" href="https://www.linkedin.com/in/kunal-sarkar-00a0b8449/" target="_blank" rel="noreferrer">Let’s connect on LinkedIn <Arrow diagonal /></a><div className="social-links"><a href="https://github.com/sparkz8085" target="_blank" rel="noreferrer">GITHUB <Arrow diagonal /></a><a href="https://www.linkedin.com/in/kunal-sarkar-00a0b8449/" target="_blank" rel="noreferrer">LINKEDIN <Arrow diagonal /></a></div></div>
             <form className="contact-form" onSubmit={handleSubmit}>
               <label>Your name<input name="from_name" placeholder="What should I call you?" required /></label>
               <label>Your email<input type="email" name="reply_to" placeholder="you@example.com" required /></label>
