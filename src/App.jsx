@@ -48,6 +48,37 @@ function Arrow({ diagonal = false }) {
   return <span aria-hidden="true" className="arrow">{diagonal ? '↗' : '→'}</span>
 }
 
+function SlideNav({ label, target }) {
+  const [progress, setProgress] = useState(0)
+
+  const handleSlide = (event) => {
+    const next = Number(event.target.value)
+    setProgress(next)
+    if (next >= 96) {
+      document.querySelector(target)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      window.setTimeout(() => setProgress(0), 350)
+    }
+  }
+
+  return (
+    <label className="slide-nav">
+      <span className="slide-nav-label">{label}</span>
+      <span className="slide-nav-track">
+        <input
+          aria-label={`Slide to ${label.toLowerCase()}`}
+          type="range"
+          min="0"
+          max="100"
+          value={progress}
+          onChange={handleSlide}
+          style={{ '--slide-progress': `${progress}%` }}
+        />
+      </span>
+      <span className="slide-nav-hint">DRAG TO GO</span>
+    </label>
+  )
+}
+
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [sending, setSending] = useState(false)
@@ -102,8 +133,8 @@ function App() {
           <div className="hero-bottom">
             <p>I’m Kunal — a BCA student exploring software development, AI, and thoughtful digital experiences. I like turning curious ideas into practical projects.</p>
             <div className="hero-actions">
-              <a className="button button-lime" href="#work">EXPLORE MY WORK <Arrow diagonal /></a>
-              <a className="under-link" href="#about">A LITTLE ABOUT ME <Arrow /></a>
+              <SlideNav label="EXPLORE MY WORK" target="#work" />
+              <SlideNav label="SEND MESSAGE" target="#contact" />
             </div>
           </div>
           <div className="hero-index"><span>SCROLL TO EXPLORE</span><span className="scroll-line"></span><span>01 / 04</span></div>
