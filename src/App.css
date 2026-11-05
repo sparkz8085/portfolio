@@ -38,3 +38,36 @@
 .slide-nav-hint{font: .49rem var(--mono);letter-spacing:.1em;color:#8f9285}
 @media(max-width:640px){.hero-actions{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px}.slide-nav{width:100%;padding:12px 11px}.slide-nav-label{font-size:.52rem}.slide-nav-hint{font-size:.44rem}}
 @media(max-width:360px){.hero-actions{grid-template-columns:1fr}.slide-nav{max-width:none}}
+
+
+/* Fixed monogram with a rotating circular signature */
+.site-shell{overflow:visible}
+.hero-stamp{display:none!important}
+.floating-stamp{
+  position:fixed;top:104px;right:max(34px,calc((100vw - 1240px)/2));
+  z-index:30;width:138px;height:138px;display:grid;place-items:center;
+  border:1px solid rgba(242,241,237,.42);border-radius:50%;
+  background:rgba(17,18,15,.22);backdrop-filter:blur(3px);
+  isolation:isolate;transition:border-color .25s,background .25s;
+}
+.floating-stamp:hover{border-color:var(--lime);background:rgba(17,18,15,.72)}
+.stamp-center{
+  position:relative;z-index:2;display:block;
+  font:700 2.65rem/.9 var(--display);letter-spacing:-.12em;color:var(--lime);
+  transform:rotate(-9deg);pointer-events:none;
+}
+.stamp-center span{color:var(--ink)}
+.stamp-orbit{position:absolute;inset:0;width:100%;height:100%;overflow:visible;animation:stamp-orbit-spin 22s linear infinite;pointer-events:none}
+.stamp-orbit text{fill:var(--lime);font:500 7.2px var(--mono);letter-spacing:1.7px}
+@keyframes stamp-orbit-spin{to{transform:rotate(360deg)}}
+@media(max-width:900px){
+ .floating-stamp{top:92px;right:22px;width:112px;height:112px}
+ .stamp-center{font-size:2.2rem}
+ .stamp-orbit text{font-size:7.1px;letter-spacing:1.25px}
+}
+@media(max-width:640px){
+ .floating-stamp{top:84px;right:12px;width:76px;height:76px}
+ .stamp-center{font-size:1.55rem}
+ .stamp-orbit text{font-size:7.5px;letter-spacing:.9px}
+}
+@media(prefers-reduced-motion:reduce){.stamp-orbit{animation:none}}
