@@ -71,3 +71,17 @@
  .stamp-orbit text{font-size:7.5px;letter-spacing:.9px}
 }
 @media(prefers-reduced-motion:reduce){.stamp-orbit{animation:none}}
+
+
+/* Relocate the fixed orbital stamp to the lower-right marked area */
+.floating-stamp{
+  top:auto;
+  right:max(42px,calc((100vw - 1240px)/2));
+  bottom:108px;
+}
+@media(max-width:900px){
+  .floating-stamp{top:auto;right:26px;bottom:92px;width:104px;height:104px}
+}
+@media(max-width:640px){
+  .floating-stamp{top:auto;right:16px;bottom:82px;width:76px;height:76px}
+}
