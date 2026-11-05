@@ -64,6 +64,8 @@ function SlideNav({ label, target }) {
     <label className="slide-nav">
       <span className="slide-nav-label">{label}</span>
       <span className="slide-nav-track">
+        <span className="slide-track-fill" style={{ width: `${progress}%` }} />
+        <span className="slide-arrow" style={{ left: `${progress}%` }} aria-hidden="true">→</span>
         <input
           aria-label={`Slide to ${label.toLowerCase()}`}
           type="range"
